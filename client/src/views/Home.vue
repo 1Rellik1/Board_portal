@@ -13,36 +13,47 @@
       </nav>
 
       <div :class="$style['container__header__rightColumn']">
-        <v-button type="button">Присоединиться</v-button>
-        <v-button type="button" variant="outline">Войти</v-button>
+        <v-button type="button" @click="login">Присоединиться</v-button>
+        <v-button type="button" variant="outline" @click="login">Войти</v-button>
       </div>
     </header>
 
     <div :class="$style['container__content']">
       <router-view/>
     </div>
+    <v-modal v-if="isModalVisible" @close="closeModal">
+      fndsjfbodls
+    </v-modal>
   </div>
 </template>
 
 <script>
 import FullLogo from '@/assets/images/logos/FullLogo.vue';
-import { VButton, VSearchInput } from '@/components';
+import { VButton, VModal, VSearchInput } from '@/components';
 
 export default {
   name: 'Home',
   components: {
     VSearchInput,
     VButton,
+    VModal,
     FullLogo,
   },
   data() {
     return {
       search: '',
+      isModalVisible: false,
     };
   },
   methods: {
     handleLogo() {
       this.$router.push('/');
+    },
+    login() {
+      this.isModalVisible = true;
+    },
+    closeModal() {
+      this.isModalVisible = false;
     }
   },
 };
