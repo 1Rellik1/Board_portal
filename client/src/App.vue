@@ -22,6 +22,12 @@ body, html {
   overflow: hidden;
 }
 
+a {
+  text-decoration: none;
+  outline: none !important;
+  color: #fff;
+}
+
 * {
   ::-webkit-scrollbar {
     width: 16px;

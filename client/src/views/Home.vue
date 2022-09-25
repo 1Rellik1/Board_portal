@@ -7,6 +7,9 @@
 
       <nav :class="$style['container__header__nav']">
         <v-search-input v-model="search"/>
+        <router-link to="/test" :active-class="$style.activeLink">
+          Test
+        </router-link>
       </nav>
 
       <div :class="$style['container__header__rightColumn']">
@@ -16,9 +19,7 @@
     </header>
 
     <div :class="$style['container__content']">
-      <div v-for="temp in 999" :key="temp">
-        {{ temp }}
-      </div>
+      <router-view/>
     </div>
   </div>
 </template>
@@ -94,5 +95,9 @@ export default {
     overflow-y: auto;
     text-align: center;
   }
+}
+
+.activeLink {
+  color: #8600EF;
 }
 </style>
