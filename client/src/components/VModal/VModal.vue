@@ -1,6 +1,6 @@
 <template>
   <div :class="$style.modalContainer">
-    <div :class="$style['modalContainer__modal']">
+    <div v-click-outside="test" :class="$style['modalContainer__modal']">
       <i :class="$style['modalContainer__modal__close']" @click="$emit('close')">
         <close/>
       </i>
@@ -17,6 +17,7 @@ export default {
   components: {Close},
   methods: {
     test() {
+      console.log('test');
       this.$emit('close');
     }
   }

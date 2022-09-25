@@ -43,6 +43,7 @@ export default {
     return {
       search: '',
       isModalVisible: false,
+      isModalCheck: false,
     };
   },
   methods: {
@@ -53,7 +54,12 @@ export default {
       this.isModalVisible = true;
     },
     closeModal() {
+      if(this.isModalVisible && !this.isModalCheck) {
+        this.isModalCheck = true;
+        return;
+      }
       this.isModalVisible = false;
+      this.isModalCheck = false;
     }
   },
 };
