@@ -15,20 +15,19 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
-                        .invalidSessionUrl("/login")
-                )
+        http
                 .authorizeHttpRequests((requests) -> requests
-                        .antMatchers("/home").permitAll()
+                        .antMatchers("/","/assets/**").permitAll()
                         .anyRequest().authenticated()
                 )
-
 //                // 401-UNAUTHORIZED when anonymous user tries to access protected URLs
 //                .exceptionHandling()
 //                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
 //                .and()
-                .formLogin(AbstractAuthenticationFilterConfigurer::permitAll
+                .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                        .invalidSessionUrl("/login")
                 )
                 .logout((logout) -> logout.permitAll().deleteCookies("JSESSIONID"));
 

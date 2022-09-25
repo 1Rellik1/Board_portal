@@ -8,11 +8,13 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
+node
 .DS_Store
 dist
 dist-ssr
 coverage
 *.local
+yarn.lock
 
 /cypress/videos/
 /cypress/screenshots/

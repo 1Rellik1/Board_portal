@@ -25,4 +25,87 @@
         </dependency>
 
     </dependencies>
+    <profiles>
+
+    <profile>
+        <id>ui</id>
+        <activation>
+            <property>
+                <name>!noui</name>
+            </property>
+        </activation>
+        <properties>
+            <sedd.ui.install.args>--prefer-offline</sedd.ui.install.args>
+            <sedd.static.content.relative>classes/static/</sedd.static.content.relative>
+            <sedd.static.content.path>${project.build.directory}/${sedd.static.content.relative}</sedd.static.content.path>
+            <sedd.template.path>${project.build.directory}/classes/templates</sedd.template.path>
+        </properties>
+        <build>
+            <plugins>
+                <plugin>
+                    <groupId>com.github.eirslett</groupId>
+                    <artifactId>frontend-maven-plugin</artifactId>
+                    <configuration>
+                        <workingDirectory>${basedir}/../client</workingDirectory>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>install-node-and-yarn</id>
+                            <goals>
+                                <goal>install-node-and-yarn</goal>
+                            </goals>
+                            <configuration>
+                                <nodeVersion>v16.0.0</nodeVersion>
+                                <yarnVersion>v1.22.11</yarnVersion>
+                            </configuration>
+                        </execution>
+                        <execution>
+                            <id>yarn-install</id>
+                            <phase>compile</phase>
+                            <goals>
+                                <goal>yarn</goal>
+                            </goals>
+                            <configuration>
+                                <arguments>install ${sedd.ui.install.args}</arguments>
+                            </configuration>
+                        </execution>
+                        <execution>
+                            <id>yarn-build</id>
+                            <phase>prepare-package</phase>
+                            <goals>
+                                <goal>yarn</goal>
+                            </goals>
+                            <configuration>
+                                <arguments>build</arguments>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <id>copy-index-template</id>
+                            <phase>prepare-package</phase>
+                            <goals>
+                                <goal>copy-resources</goal>
+                            </goals>
+                            <configuration>
+                                <outputDirectory>${basedir}/target/classes/static/</outputDirectory>
+                                <resources>
+                                    <resource>
+                                        <directory>${basedir}/../client/dist</directory>
+                                    </resource>
+                                </resources>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </build>
+    </profile>
+    </profiles>
+
+
 </project>
