@@ -9,6 +9,8 @@ lerna-debug.log*
 
 target/
 node_modules
+node
+target/
 .DS_Store
 dist
 dist-ssr
