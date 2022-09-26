@@ -7,10 +7,16 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+
+# Maven
+/target/
 target/
+*/target/
+*/target/**
+!.mvn/wrapper/maven-wrapper.jar
+
 node_modules
 node
-target/
 .DS_Store
 dist
 dist-ssr
