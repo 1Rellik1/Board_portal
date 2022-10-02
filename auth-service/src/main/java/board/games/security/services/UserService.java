@@ -1,8 +1,8 @@
 package board.games.security.services;
 
-import board.games.security.base.UserDeatilsImpl;
 import board.games.security.entities.User;
 import board.games.security.entities.repo.UserRepository;
+import board.games.security.validator.UserUniqueValidator;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -32,7 +32,7 @@ public class UserService implements UserDetailsService {
     /**
      * Кодировщик пароля.
      */
-    private  final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * Фабрика объектов приложения.
@@ -44,29 +44,70 @@ public class UserService implements UserDetailsService {
      */
     private final UserRepository userRepository;
 
-    public UserService(PasswordEncoder passwordEncoder, BeanFactory beanFactory, UserRepository userRepository) {
+    /**
+     * Валидатор уникальности нового пользователя.
+     */
+    private final UserUniqueValidator userUniqueValidator;
+
+    public UserService(PasswordEncoder passwordEncoder,
+                       BeanFactory beanFactory,
+                       UserRepository userRepository,
+                       UserUniqueValidator userUniqueValidator) {
         this.passwordEncoder = passwordEncoder;
         this.beanFactory = beanFactory;
         this.userRepository = userRepository;
+        this.userUniqueValidator = userUniqueValidator;
     }
 
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> user = userRepository.findByUserName(username);
+        Optional<User> user;
+        if (username.contains("@")) {
+            user = userRepository.findByEmail(username);
+        } else {
+            user = userRepository.findByUserName(username);
+        }
 
         if (user.isEmpty()) {
             System.out.println("User not found! " + username);
             throw new UsernameNotFoundException("User " + username + " was not found in the database");
         }
         System.out.println("Found User: " + username);
-        final UserDeatilsImpl result = beanFactory.getBean(UserDeatilsImpl.class);
-        result.initialize(user.get());
-        return result;
+        return user.get();
     }
 
-    public void addNewUser(User user){
-            user.setUserPassword(passwordEncoder.encode(user.getUserPassword()));
-            userRepository.save(user);
+    public String addNewUser(User user) {
+        String resulOfValidation = userUniqueValidator.validate(user);
+        if (resulOfValidation == null) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            userRepository.saveAndFlush(user);
+            return null;
+        }
+        return resulOfValidation;
     }
+
+    public String updateUserUser(User user) {
+        String resulOfValidation = userUniqueValidator.validate(user);
+        if (resulOfValidation == null) {
+            Optional<User> optionalUserFromDB = userRepository.getUserById(user.getId());
+            if (optionalUserFromDB.isEmpty()) {
+                return "Пользователь не найден";
+            }
+            var userFromDB = optionalUserFromDB.get();
+            if (user.getUsername() != null) {
+                userFromDB.setUserName(user.getUsername());
+            }
+            if (user.getEmail() != null) {
+                userFromDB.setUserName(user.getEmail());
+            }
+            if (user.getPassword() != null) {
+                userFromDB.setUserName(passwordEncoder.encode(user.getPassword()));
+            }
+            userRepository.saveAndFlush(user);
+            return null;
+        }
+        return resulOfValidation;
+    }
+
 }

@@ -2,21 +2,18 @@ package board.games.security.controllers;
 
 
 import board.games.security.entities.User;
-import board.games.security.services.UserService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -24,7 +21,8 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
 @RestController
-public class SecurityController {
+@RequestMapping(value = "/api")
+public class AuthenticationController {
 
     /**
      * Хэдер хронящий токен.
@@ -46,21 +44,15 @@ public class SecurityController {
      */
     private final JwtDecoder jwtDecoder;
 
-    /**
-     * Сервис работы с пользователями
-     */
-    private final UserService userService;
 
     /**
      * Конструктор
      *
-     * @param userService           Сервис работы с пользователями
      * @param authenticationManager Менеджер авторизации
      * @param jwtEncoder            Кодировщик токена
      * @param jwtDecoder            Декодировщик токена
      */
-    public SecurityController(UserService userService, AuthenticationManager authenticationManager, JwtEncoder jwtEncoder, JwtDecoder jwtDecoder) {
-        this.userService = userService;
+    public AuthenticationController(AuthenticationManager authenticationManager, JwtEncoder jwtEncoder, JwtDecoder jwtDecoder) {
         this.authenticationManager = authenticationManager;
         this.jwtEncoder = jwtEncoder;
         this.jwtDecoder = jwtDecoder;
@@ -87,12 +79,6 @@ public class SecurityController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<String> registerNewUser(@RequestBody User request) {
-        userService.addNewUser(request);
-        return ResponseEntity.ok().body("Пользователь успешно добавлен");
-    }
-
     /**
      * Метод авторизации
      *
@@ -102,9 +88,16 @@ public class SecurityController {
     @PostMapping("/login")
     public ResponseEntity<User> login(@RequestBody User request) {
         try {
-            var authentication =
-                    authenticationManager.authenticate(
-                            new UsernamePasswordAuthenticationToken(request.getUserName(), request.getUserPassword()));
+            Authentication authentication;
+            if (request.getUsername() != null) {
+                authentication =
+                        authenticationManager.authenticate(
+                                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+            } else {
+                authentication =
+                        authenticationManager.authenticate(
+                                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+            }
 
             var user = (User) authentication.getPrincipal();
 
@@ -119,7 +112,7 @@ public class SecurityController {
             var claims =
                     JwtClaimsSet.builder()
                             .expiresAt(now.plusSeconds(expiry))
-                            .subject(String.format("%s,%s", user.getId(), user.getUserName()))
+                            .subject(String.format("%s,%s", user.getId(), user.getUsername()))
 //                            .claim("roles", scope)
                             .build();
 

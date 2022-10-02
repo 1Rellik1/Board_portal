@@ -69,11 +69,12 @@ public class SecurityConfig {
         http
                 // Swagger endpoints must be publicly accessible
                 .authorizeHttpRequests((requests) -> requests
-                        .antMatchers("/", "/assets/**", "/login", "/register").permitAll()
+                        .antMatchers("/", "/assets/**", "/api/login", "/api/register").permitAll()
                         .anyRequest().authenticated()
                 )
 
                 .httpBasic(Customizer.withDefaults())
+                .logout(logout->logout.logoutUrl("/api/logout"))
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
 
         return http.build();

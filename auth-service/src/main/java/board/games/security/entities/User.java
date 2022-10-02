@@ -1,45 +1,48 @@
 package board.games.security.entities;
 
 import com.sun.istack.NotNull;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.util.Collection;
+import java.util.UUID;
 
 import static board.games.security.entities.User.TABLE_NAME;
 
 @Table(name = TABLE_NAME)
 @Entity
-public class User {
+public class User implements UserDetails {
 
-    public static final String TABLE_NAME = "userstable";
+    public static final String TABLE_NAME = "user_table";
 
     // Имя пользователя
-    @Column(name = "name")
+    @Column(name = "user_name")
     @NotNull
     private String userName;
 
     //Пароль пользователя
-    @Column(name = "pwd")
+    @Column(name = "password")
     @NotNull
-    private String userPassword;
+    private String password;
+
+    //Почта пользователя
+    @Column(name = "email")
+    @NotNull
+    private String email;
 
     // Идентификатор пользователя
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private String id = UUID.randomUUID().toString();
 
-    /**
-     * Возвращает имя пользователя
-     * @return
-     * имя пользователя
-     */
-    public String getUserName() {
-        return userName;
-    }
 
     /**
      * Устанавливает имя пользователя
-     * @param userName
-     * имя пользователя
+     *
+     * @param userName имя пользователя
      */
     public void setUserName(String userName) {
         this.userName = userName;
@@ -47,38 +50,85 @@ public class User {
 
     /**
      * Возвращает пароль пользователя
-     * @return
-     * пароль пользователя
+     *
+     * @return пароль пользователя
      */
-    public String getUserPassword() {
-        return userPassword;
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return userName;
     }
 
     /**
      * Устанавливает пароль пользователя
-     * @param pwd
-     *  пароль пользователя
+     *
+     * @param pwd пароль пользователя
      */
-    public void setUserPassword(String pwd) {
-        this.userPassword = pwd;
+    public void setPassword(String pwd) {
+        this.password = pwd;
     }
 
     /**
      * Возвращает идентификатор пользователя
-     * @return
-     * идентификатор пользователя
+     *
+     * @return идентификатор пользователя
      */
-    public int getId() {
+    public String getId() {
         return id;
     }
 
     /**
      * Устанавливает идентификатор пользователя-
-     * @param id
-     * идентификатор пользователя
+     *
+     * @param id идентификатор пользователя
      */
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
+    /**
+     * Возвращает почту пользователя
+     *
+     * @return почта пользователя
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     * Устанавливает почту пользователя-
+     *
+     * @param email почта пользователя
+     */
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }
