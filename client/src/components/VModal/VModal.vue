@@ -1,5 +1,5 @@
 <template>
-  <div :class="$style.modalContainer">
+  <div v-if="visible" :class="$style.modalContainer">
     <div v-click-outside="checkClickOutside" :class="$style['modalContainer__modal']">
       <i :class="$style['modalContainer__modal__close']" @click="$emit('close')">
         <close/>
@@ -15,6 +15,9 @@ import Close from '@/assets/images/icons/Close.vue';
 export default {
   name: 'VModal',
   components: {Close},
+  props: {
+    visible: {type: Boolean, default: false}
+  },
   methods: {
     checkClickOutside() {
       this.$emit('close');

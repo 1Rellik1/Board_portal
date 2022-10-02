@@ -22,7 +22,7 @@
       <router-view/>
     </div>
 
-    <v-modal v-if="isModalVisible" @close="closeModal">
+    <v-modal :visible="home_store.isModalVisible" @close="closeModal">
       <component
           :is="template"
       />
@@ -35,6 +35,8 @@ import FullLogo from '../assets/images/logos/FullLogo.vue';
 import { VButton, VModal, VSearchInput } from '../components';
 import Login from './Login/Login.vue';
 import Registration from './Registration/Registration.vue';
+import { mapStores } from 'pinia';
+import { useHomeStore } from '../stores/home.js';
 
 export default {
   name: 'Home',
@@ -49,10 +51,11 @@ export default {
   data() {
     return {
       search: '',
-      isModalVisible: false,
-      isModalCheck: false,
       template: undefined,
     };
+  },
+  computed: {
+    ...mapStores(useHomeStore)
   },
   methods: {
     handleLogo() {
@@ -60,15 +63,15 @@ export default {
     },
     setAuthTemplate(type) {
       this.template = type;
-      this.isModalVisible = true;
+      this.home_store.isModalVisible = true;
     },
     closeModal() {
-      if (this.isModalVisible && !this.isModalCheck) {
-        this.isModalCheck = true;
+      if (this.home_store.isModalVisible && !this.home_store.isModalCheck) {
+        this.home_store.isModalCheck = true;
         return;
       }
-      this.isModalVisible = false;
-      this.isModalCheck = false;
+      this.home_store.isModalVisible = false;
+      this.home_store.isModalCheck = false;
       this.template = undefined;
     },
   },

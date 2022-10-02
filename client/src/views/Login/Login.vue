@@ -3,7 +3,7 @@
   <p>Войти и начать играть</p>
   <v-button
       type="submit"
-      @click="user_store.testLog()"
+      @click="login"
   >
     Войти
   </v-button>
@@ -13,12 +13,20 @@
 import VButton from '../../components/VButton/VButton.vue';
 import { mapStores } from 'pinia';
 import { useUserStore } from '../../stores/user.js';
+import { useHomeStore } from '../../stores/home.js';
 
 export default {
   name: 'Login',
   components: {VButton},
   computed: {
-    ...mapStores(useUserStore)
+    ...mapStores(useUserStore, useHomeStore)
+  },
+  methods: {
+    login() {
+      this.user_store.testLog();
+      this.home_store.isModalVisible = false;
+      this.home_store.isModalCheck = false;
+    }
   }
 };
 </script>
