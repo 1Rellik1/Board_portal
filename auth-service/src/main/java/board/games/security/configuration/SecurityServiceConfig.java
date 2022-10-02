@@ -7,5 +7,5 @@ import org.springframework.context.annotation.Import;
 @Configuration
 @Import({DataBaseConfig.class,
          SecurityConfig.class})
-public class BoardGamesAppConfiguration {
+public class SecurityServiceConfig {
 }
