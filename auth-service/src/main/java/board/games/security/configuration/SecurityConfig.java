@@ -42,10 +42,10 @@ public class SecurityConfig {
     public CorsFilter corsFilter() {
         var source = new UrlBasedCorsConfigurationSource();
         var config = new CorsConfiguration();
-//        config.setAllowCredentials(true);
         config.addAllowedOrigin("*");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
+        config.addExposedHeader("*");
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }

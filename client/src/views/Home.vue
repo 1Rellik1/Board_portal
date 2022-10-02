@@ -7,7 +7,8 @@
 
       <nav :class="$style['container__header__nav']">
         <v-search-input v-model="search"/>
-        <v-button type="button" @click="test">Рег</v-button>
+        <v-button type="button" @click="testReg">Рег</v-button>
+        <v-button type="button" @click="testLog">Лог</v-button>
         <router-link to="/test" :active-class="$style.activeLink">
           Test
         </router-link>
@@ -31,7 +32,7 @@
 <script>
 import FullLogo from '@/assets/images/logos/FullLogo.vue';
 import { VButton, VModal, VSearchInput } from '@/components';
-import axios from 'axios';
+import { $host } from '../http/index.js';
 
 export default {
   name: 'Home',
@@ -63,16 +64,26 @@ export default {
       this.isModalVisible = false;
       this.isModalCheck = false;
     },
-    async test() {
-      await axios.post('http://localhost:8081/register', {
-        userName: 'testFront',
+    async testReg() {
+      await $host.post('/register', {
+        userName: 'testFront10',
         userPassword: '12345678'
-      }, {
-        headers: {
-
-        }
-      }).then((response) => {
+      }, {}).then((response) => {
         console.log(response.data);
+      }).catch(e => {
+        console.log(e);
+        // console.log(e.message);
+      });
+    },
+    async testLog() {
+      await $host.post('/login', {
+        userName: 'testFront10',
+        userPassword: '12345678'
+      }, {}).then((response) => {
+        console.log('response', response);
+        console.log('loadData', response.data);
+        console.log('loadHeader', response.headers);
+        localStorage.setItem('token', response.headers.authorization);
       }).catch(e => {
         console.log(e);
         // console.log(e.message);

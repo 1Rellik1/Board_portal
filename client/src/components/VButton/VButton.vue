@@ -5,7 +5,6 @@
         [$style.button]: true,
         [$style[`button__${variant}`]]: true
       }"
-      @click="$emit('click')"
   >
     <slot></slot>
   </button>
