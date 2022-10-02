@@ -21,6 +21,7 @@
     <div :class="$style['container__content']">
       <router-view/>
     </div>
+
     <v-modal v-if="isModalVisible" @close="closeModal">
       <component
           :is="template"

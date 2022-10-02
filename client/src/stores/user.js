@@ -8,7 +8,7 @@ export const useUserStore = defineStore('user', {
     actions: {
         async testReg() {
             await $host.post('/register', {
-                userName: 'testFront10',
+                userName: 'testFront12',
                 userPassword: '12345678'
             }, {}).then((response) => {
                 console.log(response.data);
@@ -18,9 +18,11 @@ export const useUserStore = defineStore('user', {
         },
         async testLog() {
             await $host.post('/login', {
-                userName: 'testFront10',
+                userName: 'testFront12',
                 userPassword: '12345678'
             }, {}).then((response) => {
+                console.log('Авторизавция прошла успешно');
+                console.log(response);
                 localStorage.setItem('token', response.headers.authorization);
             }).catch(e => {
                 console.log(e);
