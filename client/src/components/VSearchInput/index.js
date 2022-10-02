@@ -1,3 +1,3 @@
-import VSearchInput from '@/components/VSearchInput/VSearchInput.vue';
+import VSearchInput from './VSearchInput.vue';
 
 export { VSearchInput };

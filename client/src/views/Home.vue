@@ -7,16 +7,14 @@
 
       <nav :class="$style['container__header__nav']">
         <v-search-input v-model="search"/>
-        <v-button type="button" @click="testReg">Рег</v-button>
-        <v-button type="button" @click="testLog">Лог</v-button>
         <router-link to="/test" :active-class="$style.activeLink">
           Test
         </router-link>
       </nav>
 
       <div :class="$style['container__header__rightColumn']">
-        <v-button type="button" @click="login">Присоединиться</v-button>
-        <v-button type="button" variant="outline" @click="login">Войти</v-button>
+        <v-button type="button" @click="setAuthTemplate('Registration')">Присоединиться</v-button>
+        <v-button type="button" variant="outline" @click="setAuthTemplate('Login')">Войти</v-button>
       </div>
     </header>
 
@@ -24,15 +22,18 @@
       <router-view/>
     </div>
     <v-modal v-if="isModalVisible" @close="closeModal">
-      fndsjfbodls
+      <component
+          :is="template"
+      />
     </v-modal>
   </div>
 </template>
 
 <script>
-import FullLogo from '@/assets/images/logos/FullLogo.vue';
-import { VButton, VModal, VSearchInput } from '@/components';
-import { $host } from '../http/index.js';
+import FullLogo from '../assets/images/logos/FullLogo.vue';
+import { VButton, VModal, VSearchInput } from '../components';
+import Login from './Login/Login.vue';
+import Registration from './Registration/Registration.vue';
 
 export default {
   name: 'Home',
@@ -41,19 +42,23 @@ export default {
     VButton,
     VModal,
     FullLogo,
+    Login,
+    Registration,
   },
   data() {
     return {
       search: '',
       isModalVisible: false,
       isModalCheck: false,
+      template: undefined,
     };
   },
   methods: {
     handleLogo() {
       this.$router.push('/');
     },
-    login() {
+    setAuthTemplate(type) {
+      this.template = type;
       this.isModalVisible = true;
     },
     closeModal() {
@@ -63,32 +68,8 @@ export default {
       }
       this.isModalVisible = false;
       this.isModalCheck = false;
+      this.template = undefined;
     },
-    async testReg() {
-      await $host.post('/register', {
-        userName: 'testFront10',
-        userPassword: '12345678'
-      }, {}).then((response) => {
-        console.log(response.data);
-      }).catch(e => {
-        console.log(e);
-        // console.log(e.message);
-      });
-    },
-    async testLog() {
-      await $host.post('/login', {
-        userName: 'testFront10',
-        userPassword: '12345678'
-      }, {}).then((response) => {
-        console.log('response', response);
-        console.log('loadData', response.data);
-        console.log('loadHeader', response.headers);
-        localStorage.setItem('token', response.headers.authorization);
-      }).catch(e => {
-        console.log(e);
-        // console.log(e.message);
-      });
-    }
   },
 };
 </script>
