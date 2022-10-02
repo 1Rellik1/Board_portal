@@ -7,6 +7,7 @@
 
       <nav :class="$style['container__header__nav']">
         <v-search-input v-model="search"/>
+        <v-button type="button" @click="test">Рег</v-button>
         <router-link to="/test" :active-class="$style.activeLink">
           Test
         </router-link>
@@ -30,6 +31,7 @@
 <script>
 import FullLogo from '@/assets/images/logos/FullLogo.vue';
 import { VButton, VModal, VSearchInput } from '@/components';
+import axios from 'axios';
 
 export default {
   name: 'Home',
@@ -54,12 +56,27 @@ export default {
       this.isModalVisible = true;
     },
     closeModal() {
-      if(this.isModalVisible && !this.isModalCheck) {
+      if (this.isModalVisible && !this.isModalCheck) {
         this.isModalCheck = true;
         return;
       }
       this.isModalVisible = false;
       this.isModalCheck = false;
+    },
+    async test() {
+      await axios.post('http://localhost:8081/register', {
+        userName: 'testFront',
+        userPassword: '12345678'
+      }, {
+        headers: {
+
+        }
+      }).then((response) => {
+        console.log(response.data);
+      }).catch(e => {
+        console.log(e);
+        // console.log(e.message);
+      });
     }
   },
 };

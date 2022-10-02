@@ -21,6 +21,9 @@ import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationEntryPoint;
 import org.springframework.security.oauth2.server.resource.web.access.BearerTokenAccessDeniedHandler;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
@@ -33,6 +36,19 @@ public class SecurityConfig {
 
     @Value("${jwt.private.key}")
     private RSAPrivateKey rsaPrivateKey;
+
+    // Used by spring security if CORS is enabled.
+    @Bean
+    public CorsFilter corsFilter() {
+        var source = new UrlBasedCorsConfigurationSource();
+        var config = new CorsConfiguration();
+//        config.setAllowCredentials(true);
+        config.addAllowedOrigin("*");
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("*");
+        source.registerCorsConfiguration("/**", config);
+        return new CorsFilter(source);
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -53,7 +69,7 @@ public class SecurityConfig {
         http
                 // Swagger endpoints must be publicly accessible
                 .authorizeHttpRequests((requests) -> requests
-                        .antMatchers("/","/assets/**","/login","/register").permitAll()
+                        .antMatchers("/", "/assets/**", "/login", "/register").permitAll()
                         .anyRequest().authenticated()
                 )
 
@@ -88,6 +104,7 @@ public class SecurityConfig {
 //        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
 //        return jwtAuthenticationConverter;
 //    }
+
     /**
      * Конфигурация бина для хэширования
      *
