@@ -6,8 +6,6 @@ const $host = axios.create({
     baseURL: 'http://localhost:8081/'
 })
 
-$host.defaults.headers.common['Authorization'] = AUTH_TOKEN;
-
 const $authHost = axios.create({
     baseURL: 'https://localhost:8081/'
 })
