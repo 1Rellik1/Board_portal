@@ -3,10 +3,12 @@
   <p>Войти и начать играть</p>
   <v-button
       type="submit"
+      variant="outline__white"
       @click="login"
   >
     Войти
   </v-button>
+  <p @click="home_store.changeTemplate('Registration')">Ещё нет аккаунта? Создать</p>
 </template>
 
 <script>

@@ -13,8 +13,8 @@
       </nav>
 
       <div :class="$style['container__header__rightColumn']">
-        <v-button type="button" @click="setAuthTemplate('Registration')">Присоединиться</v-button>
-        <v-button type="button" variant="outline" @click="setAuthTemplate('Login')">Войти</v-button>
+        <v-button type="button" @click="home_store.setAuthTemplate('Registration')">Присоединиться</v-button>
+        <v-button type="button" variant="outline" @click="home_store.setAuthTemplate('Login')">Войти</v-button>
       </div>
     </header>
 
@@ -22,9 +22,9 @@
       <router-view/>
     </div>
 
-    <v-modal :visible="home_store.isModalVisible" @close="closeModal">
+    <v-modal :visible="home_store.isModalVisible" @close="home_store.closeModal">
       <component
-          :is="template"
+          :is="home_store.template"
       />
     </v-modal>
   </div>
@@ -51,7 +51,6 @@ export default {
   data() {
     return {
       search: '',
-      template: undefined,
     };
   },
   computed: {
@@ -60,19 +59,6 @@ export default {
   methods: {
     handleLogo() {
       this.$router.push('/');
-    },
-    setAuthTemplate(type) {
-      this.template = type;
-      this.home_store.isModalVisible = true;
-    },
-    closeModal() {
-      if (this.home_store.isModalVisible && !this.home_store.isModalCheck) {
-        this.home_store.isModalCheck = true;
-        return;
-      }
-      this.home_store.isModalVisible = false;
-      this.home_store.isModalCheck = false;
-      this.template = undefined;
     },
   },
 };

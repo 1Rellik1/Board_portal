@@ -1,5 +1,5 @@
 <template>
-  <router-view />
+  <router-view/>
 </template>
 
 <script>
@@ -12,7 +12,7 @@ export default {
 @import "normalize-css";
 
 body, html {
-  font-family: 'Nunito';
+  font-family: 'Nunito', sans-serif;
   font-style: normal;
   font-weight: 700;
   font-size: 20px;

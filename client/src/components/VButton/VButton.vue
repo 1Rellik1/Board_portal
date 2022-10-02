@@ -27,7 +27,7 @@ export default {
   border-radius: 20px;
   border: none;
 
-  font-family: 'Nunito';
+  font-family: 'Nunito', sans-serif;
   font-style: normal;
   font-weight: 600;
   font-size: 16px;
@@ -43,9 +43,14 @@ export default {
     border: 2px solid #8600EF;
   }
 
+  &__outline__white {
+    background: none;
+    border: 2px solid #fff;
+  }
+
   &:hover {
     transition: .17s;
-    opacity: 0.75;
+    opacity: 0.5;
   }
 }
 </style>
