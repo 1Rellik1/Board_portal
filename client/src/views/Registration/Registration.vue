@@ -22,10 +22,14 @@ export default {
     ...mapStores(useUserStore, useHomeStore)
   },
   methods: {
-    registration() {
-      this.user_store.testReg();
-      this.home_store.isModalVisible = false;
-      this.home_store.isModalCheck = false;
+    async registration() {
+      try {
+        await this.user_store.testReg();
+        this.home_store.isModalVisible = false;
+        this.home_store.isModalCheck = false;
+      } catch (e) {
+        console.log(e.response.status);
+      }
     }
   }
 };

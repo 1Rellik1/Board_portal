@@ -22,10 +22,14 @@ export default {
     ...mapStores(useUserStore, useHomeStore)
   },
   methods: {
-    login() {
-      this.user_store.testLog();
-      this.home_store.isModalVisible = false;
-      this.home_store.isModalCheck = false;
+    async login() {
+      try {
+        await this.user_store.testLog();
+        this.home_store.isModalVisible = false;
+        this.home_store.isModalCheck = false;
+      } catch (e) {
+        console.log(e.response.status);
+      }
     }
   }
 };

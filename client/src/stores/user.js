@@ -14,6 +14,7 @@ export const useUserStore = defineStore('user', {
                 console.log(response.data);
             }).catch(e => {
                 console.log(e);
+                throw e;
             });
         },
         async testLog() {
@@ -26,6 +27,7 @@ export const useUserStore = defineStore('user', {
                 localStorage.setItem('token', response.headers.authorization);
             }).catch(e => {
                 console.log(e);
+                throw e;
             });
         }
     },
