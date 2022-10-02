@@ -31,13 +31,23 @@ import java.security.interfaces.RSAPublicKey;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+    /**
+     * Публичный ключ шифрования для токена.
+     */
     @Value("${jwt.public.key}")
     private RSAPublicKey rsaPublicKey;
 
+    /**
+     * Приватный ключ шифрования для токена.
+     */
     @Value("${jwt.private.key}")
     private RSAPrivateKey rsaPrivateKey;
 
-    // Used by spring security if CORS is enabled.
+    /**
+     * Бин конфигурации корс
+     * @return
+     * Корс фильтр
+     */
     @Bean
     public CorsFilter corsFilter() {
         var source = new UrlBasedCorsConfigurationSource();
@@ -50,6 +60,11 @@ public class SecurityConfig {
         return new CorsFilter(source);
     }
 
+    /**
+     * Бин конфигурации корс
+     * @return
+     * Корс фильтр
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         // Enable CORS and disable CSRF

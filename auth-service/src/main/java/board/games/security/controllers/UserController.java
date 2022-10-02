@@ -11,14 +11,23 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     /**
-     * Сервис работы с пользователями
+     * Сервис работы с пользователями.
      */
     private final UserService userService;
 
+    /**
+     * Конструктор
+     *
+     * @param userService Сервис работы с пользователями
+     */
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
+    /**
+     * @param request Данные пользователя
+     * @return Результат регистрации, в случае ошибки 409
+     */
     @PostMapping("/register")
     public ResponseEntity<String> registerNewUser(@RequestBody User request) {
         String result = userService.addNewUser(request);
@@ -28,6 +37,10 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
     }
 
+    /**
+     * @param request Данные пользователя
+     * @return Результат обновления данных пользователя, в случае ошибки 409
+     */
     @PatchMapping("/updateUser")
     public ResponseEntity<String> updateLogin(@RequestBody User request) {
         String result = userService.updateUserUser(request);

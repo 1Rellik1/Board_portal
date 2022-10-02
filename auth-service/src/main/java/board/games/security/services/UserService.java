@@ -34,10 +34,6 @@ public class UserService implements UserDetailsService {
      */
     private final PasswordEncoder passwordEncoder;
 
-    /**
-     * Фабрика объектов приложения.
-     */
-    private final BeanFactory beanFactory;
 
     /**
      * Репозиторий пользователей
@@ -49,17 +45,30 @@ public class UserService implements UserDetailsService {
      */
     private final UserUniqueValidator userUniqueValidator;
 
+    /**
+     * Конструктор
+     * @param passwordEncoder
+     * Кодировщик пароля
+     * @param userRepository
+     * Репозиторий пользователей
+     * @param userUniqueValidator
+     *  Валидатор уникальности нового пользователя
+     */
     public UserService(PasswordEncoder passwordEncoder,
-                       BeanFactory beanFactory,
                        UserRepository userRepository,
                        UserUniqueValidator userUniqueValidator) {
         this.passwordEncoder = passwordEncoder;
-        this.beanFactory = beanFactory;
         this.userRepository = userRepository;
         this.userUniqueValidator = userUniqueValidator;
     }
 
-
+    /**
+     * Загрузка данных пользователя для авторизации
+     *
+     * @param username имя пользователя/почта
+     * @return Данные пользователя для авторизации
+     * @throws UsernameNotFoundException если пользователь не найден
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> user;
@@ -77,6 +86,12 @@ public class UserService implements UserDetailsService {
         return user.get();
     }
 
+    /**
+     * Добавление нового пользователя
+     *
+     * @param user Данные пользователя
+     * @return результат добавления
+     */
     public String addNewUser(User user) {
         String resulOfValidation = userUniqueValidator.validate(user);
         if (resulOfValidation == null) {
@@ -87,6 +102,12 @@ public class UserService implements UserDetailsService {
         return resulOfValidation;
     }
 
+    /**
+     * Обновление данных пользователя
+     *
+     * @param user Данные пользователя
+     * @return результат обновления
+     */
     public String updateUserUser(User user) {
         String resulOfValidation = userUniqueValidator.validate(user);
         if (resulOfValidation == null) {

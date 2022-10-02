@@ -38,7 +38,6 @@ public class User implements UserDetails {
     @Id
     private String id = UUID.randomUUID().toString();
 
-
     /**
      * Устанавливает имя пользователя
      *
@@ -57,6 +56,11 @@ public class User implements UserDetails {
         return password;
     }
 
+    /**
+     * Возвращает имя пользователя
+     *
+     * @return имя пользователя
+     */
     @Override
     public String getUsername() {
         return userName;
