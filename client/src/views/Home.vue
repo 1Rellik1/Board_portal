@@ -42,12 +42,12 @@
 </template>
 
 <script>
-import FullLogo from '../assets/images/logos/FullLogo.vue';
-import { VButton, VModal, VSearchInput } from '../components';
+import FullLogo from '@/assets/images/logos/FullLogo.vue';
+import { VButton, VModal, VSearchInput } from '@/components';
 import Login from './Login/Login.vue';
 import Registration from './Registration/Registration.vue';
 import { mapStores } from 'pinia';
-import { useHomeStore } from '../stores/home.js';
+import { useHomeStore } from '@/stores/home.js';
 
 export default {
   name: 'Home',

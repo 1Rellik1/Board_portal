@@ -11,10 +11,10 @@
 </template>
 
 <script>
-import VButton from '../../components/VButton/VButton.vue';
 import { mapStores } from 'pinia';
-import { useUserStore } from '../../stores/user.js';
-import { useHomeStore } from '../../stores/home.js';
+import { useUserStore } from '@/stores/user.js';
+import { useHomeStore } from '@/stores/home.js';
+import { VButton } from '@/components';
 
 export default {
   name: 'Registration',
