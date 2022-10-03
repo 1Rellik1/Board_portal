@@ -1,16 +1,27 @@
 <template>
   <div :class="$style.container">
     <header :class="$style['container__header']">
-      <div :class="$style['container__header__logo']" @click="handleLogo">
-        <full-logo/>
-      </div>
+      <div :class="$style['container__header__leftColumn']">
+        <div :class="$style['container__header__leftColumn__logo']" @click="handleLogo">
+          <full-logo/>
+        </div>
 
-      <nav :class="$style['container__header__nav']">
-        <v-search-input v-model="search"/>
-        <router-link to="/test" :active-class="$style.activeLink">
-          Test
-        </router-link>
-      </nav>
+        <div :class="$style['container__header__leftColumn__search']">
+          <v-search-input v-model="search"/>
+        </div>
+
+        <nav :class="$style['container__header__leftColumn__nav']">
+          <router-link to="/main" :active-class="$style.activeLink">
+            Главная
+          </router-link>
+          <router-link to="/game-selection" :active-class="$style.activeLink">
+            Подбор игры
+          </router-link>
+          <router-link to="/help" :active-class="$style.activeLink">
+            Поддержка
+          </router-link>
+        </nav>
+      </div>
 
       <div :class="$style['container__header__rightColumn']">
         <v-button type="button" @click="home_store.setAuthTemplate('Registration')">Присоединиться</v-button>
@@ -58,7 +69,7 @@ export default {
   },
   methods: {
     handleLogo() {
-      this.$router.push('/');
+      this.$router.push('/main');
     },
   },
 };
@@ -82,13 +93,39 @@ export default {
     background: #212330;
     color: #fff;
 
-    &__logo {
-      cursor: pointer;
+    &__leftColumn {
+      display: flex;
       margin: auto 0;
-    }
 
-    &__nav {
-      margin: auto 0;
+      &__logo {
+        cursor: pointer;
+        margin: auto 32px auto 0;
+      }
+
+      &__search {
+        margin: auto 40px auto 0;
+      }
+
+      &__nav {
+        margin: auto 0;
+
+        a {
+          font-family: 'Nunito', sans-serif;
+          font-style: normal;
+          font-weight: 600;
+          font-size: 16px;
+          line-height: 106.4%;
+          margin-right: 40px;
+
+          &:last-child {
+            margin-right: 0;
+          }
+
+          &:hover {
+            color: #8600EF;
+          }
+        }
+      }
     }
 
     &__rightColumn {

@@ -7,6 +7,7 @@
   >
     Создать аккаунт
   </v-button>
+  <p @click="home_store.changeTemplate('Login')">Войти</p>
 </template>
 
 <script>
