@@ -1,24 +1,25 @@
 <template>
   <div :class="$style.loginTemplate">
     <h1>Войти</h1>
-    <p>Войти и начать играть</p>
-    <v-input
-        v-model="email"
-        type="email"
-        placeholder="E-mail/Логин"
-    />
-    <v-input
-        v-model="password"
-        type="password"
-        placeholder="Пароль"
-    />
-    <v-button
-        type="submit"
-        @click="login"
-    >
-      Войти
-    </v-button>
-    <p @click="home_store.changeTemplate('Registration')">Ещё нет аккаунта? Создать</p>
+    <p :class="$style['loginTemplate__step-title']">Войти и начать играть</p>
+    <form @submit.prevent="login">
+      <v-input
+          v-model="email"
+          type="email"
+          placeholder="E-mail/Логин"
+      />
+      <v-input
+          v-model="password"
+          type="password"
+          placeholder="Пароль"
+      />
+      <v-button
+          type="submit"
+      >
+        Войти
+      </v-button>
+    </form>
+    <p>Ещё нет аккаунта? <span @click="home_store.changeTemplate('Registration')">Создать</span></p>
   </div>
 </template>
 
@@ -60,9 +61,34 @@ export default {
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  min-width: 384px;
 
-  button {
-    width: 100%;
+  &__step-title {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+
+    button {
+      width: 100%;
+    }
+  }
+
+  p {
+    span {
+      color: #8600EF;
+      cursor: pointer;
+      text-decoration: underline;
+
+      &:hover {
+        text-decoration: none;
+      }
+    }
   }
 }
 </style>

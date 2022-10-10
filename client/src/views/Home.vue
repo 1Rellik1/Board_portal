@@ -108,6 +108,8 @@ export default {
 
       &__nav {
         margin: auto 0;
+        display: flex;
+        gap: 40px;
 
         a {
           font-family: 'Nunito', sans-serif;
@@ -115,11 +117,6 @@ export default {
           font-weight: 600;
           font-size: 16px;
           line-height: 106.4%;
-          margin-right: 40px;
-
-          &:last-child {
-            margin-right: 0;
-          }
 
           &:hover {
             color: #8600EF;

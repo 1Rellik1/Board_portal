@@ -45,7 +45,7 @@ export default {
     display: flex;
     flex-direction: column;
     background-color: #212330;
-    padding: 60px 38px;
+    padding: 40px 30px;
     border-radius: 20px;
 
     &__close {
