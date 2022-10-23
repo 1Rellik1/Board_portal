@@ -7,13 +7,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * Класс старта приложения
  */
 @SpringBootApplication
-public class SecurityService {
+public class AuthService {
     /**
      * Старт приложения
      * @param args
      * аргументы
      */
     public static void main(String[] args) {
-        SpringApplication.run(SecurityService.class, args);
+        SpringApplication.run(AuthService.class, args);
     }
 }

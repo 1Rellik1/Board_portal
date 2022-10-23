@@ -92,14 +92,13 @@ public class UserService implements UserDetailsService {
      * @param user Данные пользователя
      * @return результат добавления
      */
-    public String addNewUser(User user) {
-        String resulOfValidation = userUniqueValidator.validate(user);
-        if (resulOfValidation == null) {
+    public boolean addNewUser(User user) {
+        if (userUniqueValidator.validate(user)) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             userRepository.saveAndFlush(user);
-            return null;
+            return true;
         }
-        return resulOfValidation;
+        return false;
     }
 
     /**
@@ -108,12 +107,11 @@ public class UserService implements UserDetailsService {
      * @param user Данные пользователя
      * @return результат обновления
      */
-    public String updateUserUser(User user) {
-        String resulOfValidation = userUniqueValidator.validate(user);
-        if (resulOfValidation == null) {
+    public boolean updateUserUser(User user) {
+        if (userUniqueValidator.validate(user)) {
             Optional<User> optionalUserFromDB = userRepository.getUserById(user.getId());
             if (optionalUserFromDB.isEmpty()) {
-                return "Пользователь не найден";
+                throw new RuntimeException( "Пользователь не найден");
             }
             var userFromDB = optionalUserFromDB.get();
             if (user.getUsername() != null) {
@@ -126,9 +124,9 @@ public class UserService implements UserDetailsService {
                 userFromDB.setUserName(passwordEncoder.encode(user.getPassword()));
             }
             userRepository.saveAndFlush(user);
-            return null;
+            return true;
         }
-        return resulOfValidation;
+        return false;
     }
 
 }
