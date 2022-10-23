@@ -30,11 +30,10 @@ public class UserController {
      */
     @PostMapping("/register")
     public ResponseEntity<String> registerNewUser(@RequestBody User request) {
-        String result = userService.addNewUser(request);
-        if (result == null) {
+        if (userService.addNewUser(request)) {
             return ResponseEntity.ok().body("Пользователь успешно добавлен");
         }
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
+        return ResponseEntity.status(HttpStatus.CONFLICT).body("Ошибка");
     }
 
     /**
@@ -43,10 +42,9 @@ public class UserController {
      */
     @PatchMapping("/updateUser")
     public ResponseEntity<String> updateLogin(@RequestBody User request) {
-        String result = userService.updateUserUser(request);
-        if (result == null) {
+        if (userService.updateUserUser(request)) {
             return ResponseEntity.ok().body("Данные пользователя успешно обновлены");
         }
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
+        return ResponseEntity.status(HttpStatus.CONFLICT).body("Ошибка");
     }
 }

@@ -24,18 +24,18 @@ public class UserUniqueValidator {
      * Валидация данных пользователя
      *
      * @param user Данные пользователя
-     * @return результат валидации
+     * @return результат валидации, если все норм, то true
      */
-    public String validate(User user) {
+    public boolean validate(User user) {
         var sameUser = userRepository.findByUserName(user.getUsername());
         if (!sameUser.isEmpty()) {
-            return "Пользователь с данным login уже существует";
+            throw new RuntimeException("Пользователь с данным login уже существует") ;
         } else {
             sameUser = userRepository.findByEmail(user.getEmail());
             if (!sameUser.isEmpty()) {
-                return "Пользователь с данным email уже существует";
+                throw new RuntimeException( "Пользователь с данным email уже существует");
             } else {
-                return null;
+                return true;
             }
         }
     }
