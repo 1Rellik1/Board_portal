@@ -41,7 +41,7 @@ public class EventCardController {
 
         Long balance = playerService.getPlayer(sessionId, playerName).getBalance();
         int digit = new Random().nextInt(MAX_BORDER + 1 - MIN_BORDER) + MIN_BORDER;
-        ;
+        
         if (digits.contains(digit)) {
             Long benefit = (JACKPOT_MAX_DIGITS_COUNT + 1 - digits.size())
                     * JACKPOT_BET * JACKPOT_MULTIPLIER;
