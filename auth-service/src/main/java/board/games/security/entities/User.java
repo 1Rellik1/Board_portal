@@ -4,14 +4,16 @@ import com.sun.istack.NotNull;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import static board.games.security.entities.User.TABLE_NAME;
+import static board.games.security.entities.UserToRole.ColumnName.U2RT_ROLE_ID;
+import static board.games.security.entities.UserToRole.ColumnName.U2RT_USER_ID;
+import static board.games.security.entities.UserToRole.USER_2_ROLE_TABLE_NAME;
 
 @Table(name = TABLE_NAME)
 @Entity
@@ -33,6 +35,20 @@ public class User implements UserDetails {
     @Column(name = "email")
     @NotNull
     private String email;
+
+    @ManyToMany
+    @JoinTable(
+            name = USER_2_ROLE_TABLE_NAME,
+            joinColumns = @JoinColumn(name = U2RT_USER_ID),
+            inverseJoinColumns = @JoinColumn(
+                    name = U2RT_ROLE_ID))
+    private Set<Role> authorities = new HashSet<>();
+
+    /**
+     * Флаг, указывающий, активен ли пользователь.
+     */
+    @Column(nullable = false, name = "active")
+    Boolean active = true;
 
     // Идентификатор пользователя
     @Id
@@ -111,19 +127,31 @@ public class User implements UserDetails {
         this.email = email;
     }
 
+    public void setAuthorities(Set<Role> authorities) {
+        this.authorities = authorities;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return authorities;
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        return active;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return active;
     }
 
     @Override
@@ -133,6 +161,6 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return active;
     }
 }
