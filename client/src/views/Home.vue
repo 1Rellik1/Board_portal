@@ -140,7 +140,8 @@ export default {
 
   &__content {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-gap: 45px;
     padding: 8px 64px;
     overflow-y: auto;
     text-align: center;

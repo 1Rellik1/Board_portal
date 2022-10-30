@@ -1,7 +1,5 @@
 <template>
-  <div v-for="temp in 999" :key="temp">
-    {{ temp }}
-  </div>
+  Подбор игры - в разработке
 </template>
 
 <script>

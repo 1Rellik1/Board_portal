@@ -4,8 +4,8 @@
     <p :class="$style['loginTemplate__step-title']">Войти и начать играть</p>
     <form @submit.prevent="login">
       <v-input
-          v-model="email"
-          type="email"
+          v-model="userName"
+          type="text"
           placeholder="E-mail/Логин"
       />
       <v-input
@@ -34,7 +34,7 @@ export default {
   components: {VInput, VButton},
   data() {
     return {
-      email: '',
+      userName: '',
       password: '',
     };
   },
@@ -44,7 +44,10 @@ export default {
   methods: {
     async login() {
       try {
-        await this.user_store.testLog();
+        await this.user_store.login({
+          userName: this.userName,
+          password: this.password,
+        });
         this.home_store.isModalVisible = false;
         this.home_store.isModalCheck = false;
       } catch (e) {
