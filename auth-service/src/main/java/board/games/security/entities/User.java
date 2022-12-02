@@ -163,4 +163,10 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return active;
     }
+
+    public String toJsonFormat() {
+        return "{\"userName\":\"" + userName + '"' + ',' +
+                "\"email\":\""+ email + '"' + ',' +
+                "\"id\":\""  + id + "\"}" ;
+    }
 }

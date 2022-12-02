@@ -3,13 +3,22 @@ package board.games.security.services;
 import board.games.security.entities.User;
 import board.games.security.entities.repo.UserRepository;
 import board.games.security.validator.UserUniqueValidator;
-import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.util.Base64;
 import java.util.Optional;
 
 /**
@@ -17,7 +26,13 @@ import java.util.Optional;
  */
 @Service
 public class UserService implements UserDetailsService {
+    /**
+     * Хэдер хронящий токен.
+     */
+    private final static String AUTHORIZATION_HEADER = "Authorization";
 
+    @Value("${url.user.info.service}")
+    private String userInfoServiceUrl;
     /**
      * Сообщение об удаление пользователя
      */
@@ -47,12 +62,10 @@ public class UserService implements UserDetailsService {
 
     /**
      * Конструктор
-     * @param passwordEncoder
-     * Кодировщик пароля
-     * @param userRepository
-     * Репозиторий пользователей
-     * @param userUniqueValidator
-     *  Валидатор уникальности нового пользователя
+     *
+     * @param passwordEncoder     Кодировщик пароля
+     * @param userRepository      Репозиторий пользователей
+     * @param userUniqueValidator Валидатор уникальности нового пользователя
      */
     public UserService(PasswordEncoder passwordEncoder,
                        UserRepository userRepository,
@@ -95,6 +108,20 @@ public class UserService implements UserDetailsService {
     public boolean addNewUser(User user) {
         if (userUniqueValidator.validate(user)) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
+            try {
+                HttpRequest request = HttpRequest.newBuilder()
+                        .POST(HttpRequest.BodyPublishers.ofString(user.toJsonFormat()))
+                        .uri(new URI(userInfoServiceUrl + "/register"))
+                        .header("Content-Type", "application/json")
+                        .build();
+                HttpClient client = HttpClient.newHttpClient();
+                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                if (response.statusCode() != 200) {
+                    return false;
+                }
+            } catch (URISyntaxException | IOException | InterruptedException e) {
+                throw new RuntimeException("Не удалось добавить пользователя");
+            }
             userRepository.saveAndFlush(user);
             return true;
         }
@@ -111,7 +138,7 @@ public class UserService implements UserDetailsService {
         if (userUniqueValidator.validate(user)) {
             Optional<User> optionalUserFromDB = userRepository.getUserById(user.getId());
             if (optionalUserFromDB.isEmpty()) {
-                throw new RuntimeException( "Пользователь не найден");
+                throw new RuntimeException("Пользователь не найден");
             }
             var userFromDB = optionalUserFromDB.get();
             if (user.getUsername() != null) {
@@ -123,10 +150,30 @@ public class UserService implements UserDetailsService {
             if (user.getPassword() != null) {
                 userFromDB.setUserName(passwordEncoder.encode(user.getPassword()));
             }
+            try {
+                HttpRequest request = HttpRequest.newBuilder()
+                        .POST(HttpRequest.BodyPublishers.ofString(user.toJsonFormat()))
+                        .uri(new URI(userInfoServiceUrl + "/updateUser"))
+                        .header(AUTHORIZATION_HEADER, ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+                                .getRequest().getHeader(AUTHORIZATION_HEADER))
+                        .header("Content-Type", "application/json")
+                        .build();
+                HttpClient client = HttpClient.newHttpClient();
+                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                if (response.statusCode() != 200) {
+                    return false;
+                }
+            } catch (URISyntaxException | IOException | InterruptedException e) {
+                throw new RuntimeException("Не удалось обновить пользователя");
+            }
             userRepository.saveAndFlush(user);
             return true;
         }
         return false;
     }
 
+    private final String getBasicAuthenticationHeader(String username, String password) {
+        String valueToEncode = username + ":" + password;
+        return "Basic " + Base64.getEncoder().encodeToString(valueToEncode.getBytes());
+    }
 }
