@@ -1,0 +1,17 @@
+version: '2.1'
+services:
+  game_info_db:
+    container_name: game_info_db
+    image: library/postgres:12.6
+    environment:
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_USER=admin
+      - POSTGRES_DB=game_info
+      - DB_PORT=5437
+    volumes:
+      - game_info_database:/var/lib/postgresql/data:z
+    ports:
+      - 5437:5432
+volumes:
+  game_info_database:
+    external: true
