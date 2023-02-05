@@ -69,6 +69,8 @@ export default {
   &__step-title {
     font-size: 14px;
     color: rgba(255, 255, 255, 0.7);
+    max-width: 220px;
+    text-align: center;
   }
 
   form {
