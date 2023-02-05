@@ -8,6 +8,8 @@ public class GameInfoDto {
 
     private String url;
 
+    private String type;
+
     private String image;
 
     public String getId() {
@@ -32,6 +34,14 @@ public class GameInfoDto {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getImage() {

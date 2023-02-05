@@ -16,10 +16,20 @@ public class GameInfo {
     @Column(name = "url",nullable = false)
     private String url;
 
+    @Column(name = "type",nullable = false)
+    private String type;
+
     @Lob
     @Column(name = "image",nullable = false)
-//    @Type(type = "org.hibernate.type.BinaryType")
     private String image;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public String getId() {
         return id;

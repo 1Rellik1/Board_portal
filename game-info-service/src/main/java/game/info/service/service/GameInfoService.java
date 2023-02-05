@@ -24,6 +24,7 @@ public class GameInfoService {
             GameInfoDto gameInfoDto = new GameInfoDto();
             gameInfoDto.setName(gameInfo.getName());
             gameInfoDto.setImage(gameInfo.getImage());
+            gameInfoDto.setType(gameInfo.getType());
             gameInfoDto.setUrl(gameInfo.getUrl());
             gameInfoDto.setId(gameInfo.getId());
             return gameInfoDto;
@@ -35,6 +36,7 @@ public class GameInfoService {
         gameInfo.setName(gameInfoDto.getName());
         gameInfo.setImage(gameInfoDto.getImage());
         gameInfo.setUrl(gameInfoDto.getUrl());
+        gameInfo.setType(gameInfoDto.getType());
         gameInfoRepository.saveAndFlush(gameInfo);
         return gameInfo;
     }
@@ -47,6 +49,7 @@ public class GameInfoService {
         }
         if (gameInfoDto.getImage()!=null) {
             gameInfo.setImage(gameInfoDto.getImage());
+            gameInfo.setType(gameInfoDto.getType());
         }
         if (gameInfoDto.getUrl()!=null) {
             gameInfo.setUrl(gameInfoDto.getUrl());
