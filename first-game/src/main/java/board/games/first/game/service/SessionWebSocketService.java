@@ -13,19 +13,16 @@ import board.games.first.game.enums.MoveStatus;
 import board.games.first.game.MessageCreator;
 import board.games.first.game.mapper.PlayerMapper;
 import board.games.first.game.mapper.RollDicesMapper;
+import org.hibernate.pretty.MessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayDeque;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static board.games.first.game.params.EventParam.START_BONUS;
 import static board.games.first.game.params.InitialGameValue.*;
-import static board.games.first.game.params.PlayingFieldParam.FIELD_MIN_SIZE;
-import static board.games.first.game.params.PlayingFieldParam.FIELD_SIZE;
+import static board.games.first.game.params.PlayingFieldParam.*;
 import static board.games.first.game.params.ResultMessage.SURRENDER;
 import static board.games.first.game.enums.MoveStatus.MIDDLE;
 import static board.games.first.game.enums.MoveStatus.START;
@@ -149,10 +146,16 @@ public class SessionWebSocketService {
         return PlayerMapper.surrenderPlayerToDTO(playerName, LOST, cardStates);
     }
 
-    public RollDiceResultDTO movePlayer(Integer diceResult, String sessionId, String playerName) {
+    @Transactional
+    public RollDiceResultDTO rollDices(String sessionId, String playerName) {
         Player player = playerService.getPlayer(sessionId, playerName);
+
+        int firstRoll =new Random().nextInt(MAX_BORDER + 1 - MIN_BORDER) + MIN_BORDER;
+        int secondRoll =new Random().nextInt(MAX_BORDER + 1 - MIN_BORDER) + MIN_BORDER;
+        List<Integer> digits = List.of(firstRoll, secondRoll);
+
         int position = player.getPosition();
-        int potentialPos = player.getPosition() + diceResult;
+        int potentialPos = player.getPosition() + firstRoll + secondRoll;
         int newPosition;
         if (potentialPos < FIELD_MIN_SIZE) {
             newPosition = FIELD_SIZE + potentialPos;
@@ -161,19 +164,21 @@ public class SessionWebSocketService {
         } else {
             newPosition = potentialPos;
         }
-        playerService.updatePlayerPosition(diceResult, sessionId, playerName);
 
         Message updMessage = null;
         Long balance = null;
-        if (newPosition > diceResult) {
+        playerService.updatePlayerPosition(newPosition, sessionId, playerName);
+
+        if (position > newPosition) {
             balance = player.getBalance() + START_BONUS;
             playerService.updatePlayerBalance(balance, sessionId, playerName);
             updMessage = MessageCreator.createStartBonusMessage(playerName);
         }
+
         Session session = sessionCommonService.getSession(sessionId);
         session.setMoveStatus(MIDDLE);
         sessionRepository.saveAndFlush(session);
-        Message message = MessageCreator.createRollDicesMessage(playerName, diceResult);
+        Message message = MessageCreator.createRollDicesMessage(playerName, digits);
         messageRepository.save(message);
         session.getMessages().add(message);
 
@@ -182,7 +187,8 @@ public class SessionWebSocketService {
             session.getMessages().add(updMessage);
         }
 
-        return RollDicesMapper.rollResultTODTO(diceResult, playerName, diceResult, balance);
+        return RollDicesMapper.rollResultTODTO(digits, playerName, newPosition, balance);
+
     }
 
     @Transactional

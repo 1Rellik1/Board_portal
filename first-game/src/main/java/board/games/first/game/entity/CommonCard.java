@@ -17,6 +17,9 @@ public class CommonCard {
     @Column(name = "image", nullable = false)
     private String image;
 
+    @Column(name = "image_type", nullable = false)
+    private String imageType;
+
     @Column(name = "card_type", nullable = false)
     @Enumerated(STRING)
     private CardType type;

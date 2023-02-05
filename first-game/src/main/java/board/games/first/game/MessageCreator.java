@@ -3,6 +3,8 @@ package board.games.first.game;
 import board.games.first.game.entity.Message;
 import board.games.first.game.mapper.MessageContentMapper;
 
+import java.util.List;
+
 import static board.games.first.game.params.ResultMessage.*;
 import static board.games.first.game.enums.MessageType.COMMON;
 
@@ -16,7 +18,7 @@ public class MessageCreator {
         return message;
     }
 
-    public static Message createRollDicesMessage(String playerName, Integer diceResult) {
+    public static Message createRollDicesMessage(String playerName, List<Integer> diceResult) {
         Message message = new Message();
         message.setContent(MessageContentMapper.rollDiceToMessageContent(diceResult));
         message.setSender(playerName);

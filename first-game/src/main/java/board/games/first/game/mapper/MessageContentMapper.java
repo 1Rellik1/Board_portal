@@ -6,8 +6,8 @@ import static board.games.first.game.params.ResultMessage.*;
 
 public class MessageContentMapper {
 
-    public static String rollDiceToMessageContent(Integer diceResult) {
-        return String.format(DICE_ROLL_RESULT,diceResult);
+    public static String rollDiceToMessageContent(List<Integer> digits) {
+        return String.format(DICE_ROLL_RESULT, digits.get(0), digits.get(1));
     }
 
     public static String jackpotEventWinToMessageContent(List<Integer> digits, int digit, Long benefit) {

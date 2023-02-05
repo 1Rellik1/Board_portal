@@ -6,7 +6,7 @@ import java.util.List;
 public class RollDiceResultDTO {
     private PlayerBalanceDTO playerBalance;
     private PlayerPositionDTO player;
-    private Integer diceResult;
+    private List<Integer> digits;
 
     public PlayerBalanceDTO getPlayerBalance() {
         return playerBalance;
@@ -24,11 +24,12 @@ public class RollDiceResultDTO {
         this.player = player;
     }
 
-    public Integer getDiceResult() {
-        return diceResult;
+
+    public List<Integer> getDigits() {
+        return digits;
     }
 
-    public void setDiceResult(Integer diceResult) {
-        this.diceResult = diceResult;
+    public void setDigits(List<Integer> digits) {
+        this.digits = digits;
     }
 }
