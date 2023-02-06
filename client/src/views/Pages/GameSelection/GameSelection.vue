@@ -3,6 +3,7 @@
   <v-button @click="create">/sessions/create</v-button>
   <v-button @click="check">/sessions/check/{sessionId}</v-button>
   <v-button @click="state">/sessions/state/{sessionId}</v-button>
+  <v-button @click="checkCard">/cards</v-button>
   <v-button @click="deleteSession">/sessions/{id} - заканчивает сессию</v-button>
   <v-button @click="getAllSessions">/sessions</v-button>
 </template>
@@ -57,6 +58,21 @@ export default {
     async state() {
       const id = localStorage.getItem('sessionId')
       await $authHostMonopoly.get(`/sessions/state/${id}`)
+          .then(response => {
+            console.log(response.data);
+          })
+          .catch(error => {
+            console.log(error);
+          })
+    },
+    async checkCard() {
+      const id = localStorage.getItem('sessionId')
+      await $authHostMonopoly.get('/cards', {
+        params: {
+          sessionId: id,
+          cardId: 2,
+        },
+      })
           .then(response => {
             console.log(response.data);
           })
