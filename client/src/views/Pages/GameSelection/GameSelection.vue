@@ -1,9 +1,9 @@
 <template>
   <v-button @click="static">/sessions/static</v-button>
   <v-button @click="create">/sessions/create</v-button>
-  <v-button>/sessions/check/{sessionId}</v-button>
-  <v-button>/sessions/state/{sessionId}</v-button>
-  <v-button>/sessions/{id} - заканчивает сессию</v-button>
+  <v-button @click="check">/sessions/check/{sessionId}</v-button>
+  <v-button @click="state">/sessions/state/{sessionId}</v-button>
+  <v-button @click="deleteSession">/sessions/{id} - заканчивает сессию</v-button>
   <v-button @click="getAllSessions">/sessions</v-button>
 </template>
 
@@ -37,6 +37,36 @@ export default {
         sessionId: id,
         playerName: this.user_store.getUser.username,
       })
+          .then(response => {
+            console.log(response.data);
+          })
+          .catch(error => {
+            console.log(error);
+          })
+    },
+    async check() {
+      const id = localStorage.getItem('sessionId')
+      await $authHostMonopoly.get(`/sessions/check/${id}`)
+          .then(response => {
+            console.log(response.data);
+          })
+          .catch(error => {
+            console.log(error);
+          })
+    },
+    async state() {
+      const id = localStorage.getItem('sessionId')
+      await $authHostMonopoly.get(`/sessions/state/${id}`)
+          .then(response => {
+            console.log(response.data);
+          })
+          .catch(error => {
+            console.log(error);
+          })
+    },
+    async deleteSession() {
+      const id = localStorage.getItem('sessionId')
+      await $authHostMonopoly.delete(`/sessions/${id}`)
           .then(response => {
             console.log(response.data);
           })

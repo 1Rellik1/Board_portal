@@ -54,6 +54,10 @@ public class CommonCard {
         this.type = type;
     }
 
+    public Long getPrice() { return price; }
+
+    public void setPrice(Long price) { this.price = price; }
+
     public String getImageType() { return imageType; }
 
     public void setImageType(String imageType) { this.imageType = imageType; }

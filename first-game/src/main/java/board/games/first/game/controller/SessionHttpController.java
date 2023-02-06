@@ -86,6 +86,7 @@ public class SessionHttpController {
             sessionDto.setId(session.getId());
             sessionDto.setAmountOfPlayers(playerNames.size());
             sessionDto.setPlayerNames(playerNames);
+            sessionDto.setState(session.getState().name());
             return sessionDto;
         }).toList());
     }
