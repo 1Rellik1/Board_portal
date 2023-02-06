@@ -1,8 +1,12 @@
 <template>
-  <input v-model="internalValue"
-         :class="{[$style.filledInput]: internalValue.length > 0}"
-         placeholder="Поиск"
-         type="text"
+  <input
+      v-model="internalValue"
+      :class="{
+         [$style['input-search']]: true,
+         [$style['filledInput']]: internalValue.length > 0
+      }"
+      placeholder="Поиск"
+      type="text"
   />
 </template>
 
@@ -21,8 +25,8 @@ export default {
 </script>
 
 <style lang="scss" module>
-input {
-  width: 166px;
+.input-search {
+  width: 100px;
   height: 40px;
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 25px;

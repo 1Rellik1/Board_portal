@@ -3,28 +3,36 @@ import { $host } from '../http/index.js';
 
 export const useUserStore = defineStore('user', {
     state: () => ({
-        token: localStorage.getItem('token'),
+        token: '' || localStorage.getItem('token'),
     }),
     actions: {
-        async testReg() {
+        async registration(payload) {
             await $host.post('/register', {
-                userName: 'testFront10',
-                userPassword: '12345678'
+                userName: payload.userName,
+                email: payload.email,
+                userPassword: payload.password,
             }, {}).then((response) => {
                 console.log(response.data);
             }).catch(e => {
                 console.log(e);
+                throw e;
             });
         },
-        async testLog() {
+        async login(payload) {
             await $host.post('/login', {
-                userName: 'testFront10',
-                userPassword: '12345678'
+                userName: payload.userName,
+                userPassword: payload.password,
             }, {}).then((response) => {
+                console.log('Авторизавция прошла успешно');
+                console.log(response);
                 localStorage.setItem('token', response.headers.authorization);
             }).catch(e => {
                 console.log(e);
+                throw e;
             });
+        },
+        logout() {
+            localStorage.clear();
         }
     },
     getters: {},

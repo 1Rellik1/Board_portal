@@ -1,39 +1,53 @@
 <template>
   <div :class="$style.container">
     <header :class="$style['container__header']">
-      <div :class="$style['container__header__logo']" @click="handleLogo">
-        <full-logo/>
+      <div :class="$style['container__header__leftColumn']">
+        <div :class="$style['container__header__leftColumn__logo']" @click="handleLogo">
+          <full-logo/>
+        </div>
+
+        <div :class="$style['container__header__leftColumn__search']">
+          <v-search-input v-model="search"/>
+        </div>
+
+        <nav :class="$style['container__header__leftColumn__nav']">
+          <router-link to="/main" :active-class="$style.activeLink">
+            Главная
+          </router-link>
+          <router-link to="/game-selection" :active-class="$style.activeLink">
+            Подбор игры
+          </router-link>
+          <router-link to="/help" :active-class="$style.activeLink">
+            Поддержка
+          </router-link>
+        </nav>
       </div>
 
-      <nav :class="$style['container__header__nav']">
-        <v-search-input v-model="search"/>
-        <router-link to="/test" :active-class="$style.activeLink">
-          Test
-        </router-link>
-      </nav>
-
       <div :class="$style['container__header__rightColumn']">
-        <v-button type="button" @click="setAuthTemplate('Registration')">Присоединиться</v-button>
-        <v-button type="button" variant="outline" @click="setAuthTemplate('Login')">Войти</v-button>
+        <v-button type="button" @click="home_store.setAuthTemplate('Registration')">Присоединиться</v-button>
+        <v-button type="button" variant="outline" @click="home_store.setAuthTemplate('Login')">Войти</v-button>
       </div>
     </header>
 
     <div :class="$style['container__content']">
       <router-view/>
     </div>
-    <v-modal v-if="isModalVisible" @close="closeModal">
+
+    <v-modal :visible="home_store.isModalVisible" @close="home_store.closeModal">
       <component
-          :is="template"
+          :is="home_store.template"
       />
     </v-modal>
   </div>
 </template>
 
 <script>
-import FullLogo from '../assets/images/logos/FullLogo.vue';
-import { VButton, VModal, VSearchInput } from '../components';
+import FullLogo from '@/assets/images/logos/FullLogo.vue';
+import { VButton, VModal, VSearchInput } from '@/components';
 import Login from './Login/Login.vue';
 import Registration from './Registration/Registration.vue';
+import { mapStores } from 'pinia';
+import { useHomeStore } from '@/stores/home.js';
 
 export default {
   name: 'Home',
@@ -48,27 +62,14 @@ export default {
   data() {
     return {
       search: '',
-      isModalVisible: false,
-      isModalCheck: false,
-      template: undefined,
     };
+  },
+  computed: {
+    ...mapStores(useHomeStore)
   },
   methods: {
     handleLogo() {
-      this.$router.push('/');
-    },
-    setAuthTemplate(type) {
-      this.template = type;
-      this.isModalVisible = true;
-    },
-    closeModal() {
-      if (this.isModalVisible && !this.isModalCheck) {
-        this.isModalCheck = true;
-        return;
-      }
-      this.isModalVisible = false;
-      this.isModalCheck = false;
-      this.template = undefined;
+      this.$router.push('/main');
     },
   },
 };
@@ -92,13 +93,36 @@ export default {
     background: #212330;
     color: #fff;
 
-    &__logo {
-      cursor: pointer;
+    &__leftColumn {
+      display: flex;
       margin: auto 0;
-    }
 
-    &__nav {
-      margin: auto 0;
+      &__logo {
+        cursor: pointer;
+        margin: auto 32px auto 0;
+      }
+
+      &__search {
+        margin: auto 40px auto 0;
+      }
+
+      &__nav {
+        margin: auto 0;
+        display: flex;
+        gap: 40px;
+
+        a {
+          font-family: 'Nunito', sans-serif;
+          font-style: normal;
+          font-weight: 600;
+          font-size: 16px;
+          line-height: 106.4%;
+
+          &:hover {
+            color: #8600EF;
+          }
+        }
+      }
     }
 
     &__rightColumn {
@@ -116,7 +140,8 @@ export default {
 
   &__content {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-gap: 45px;
     padding: 8px 64px;
     overflow-y: auto;
     text-align: center;

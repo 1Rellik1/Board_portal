@@ -1,10 +1,12 @@
-# frontend
+# Frontend
 
-This template should help get you started developing with Vue 3 in Vite.
+Для запуска клиентской части нужно:
 
-## Recommended IDE Setup
-
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+```sh
+Скачать node.js версия: 16+
+Установить пакетный менеджер yarn командой npm install --global yarn
+Открыть консоль от имени администратора и ввести команду Set-ExecutionPolicy RemoteSigned
+```
 
 ## Customize configuration
 

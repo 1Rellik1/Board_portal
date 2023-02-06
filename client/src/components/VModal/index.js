@@ -1,3 +1,3 @@
-import VModal from '@/components/VModal/VModal.vue';
+import VModal from './VModal.vue';
 
 export { VModal };
