@@ -6,14 +6,13 @@ import board.games.first.game.dto.response.SurrenderPlayerDTO;
 import board.games.first.game.entity.CardState;
 import board.games.first.game.entity.Message;
 import board.games.first.game.entity.Player;
-import board.games.first.game.entity.Session;
+import board.games.first.game.entity.session.Session;
 import board.games.first.game.entity.repo.MessageRepository;
 import board.games.first.game.entity.repo.SessionRepository;
 import board.games.first.game.enums.MoveStatus;
 import board.games.first.game.MessageCreator;
 import board.games.first.game.mapper.PlayerMapper;
 import board.games.first.game.mapper.RollDicesMapper;
-import org.hibernate.pretty.MessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

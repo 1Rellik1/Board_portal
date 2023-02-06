@@ -1,6 +1,6 @@
 package board.games.first.game.service;
 
-import board.games.first.game.entity.Session;
+import board.games.first.game.entity.session.Session;
 import board.games.first.game.entity.repo.SessionRepository;
 import board.games.first.game.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;

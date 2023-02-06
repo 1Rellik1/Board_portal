@@ -6,7 +6,7 @@ import board.games.first.game.dto.response.PlayingFieldStaticDTO;
 import board.games.first.game.dto.response.SuccessMessageDTO;
 import board.games.first.game.entity.CardState;
 import board.games.first.game.entity.CompanyCard;
-import board.games.first.game.entity.Session;
+import board.games.first.game.entity.session.Session;
 import board.games.first.game.service.CardStateService;
 import board.games.first.game.service.CompanyCardService;
 import board.games.first.game.service.SessionCommonService;

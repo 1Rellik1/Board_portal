@@ -7,6 +7,7 @@ import board.games.first.game.entity.*;
 import board.games.first.game.entity.repo.CardStateRepository;
 import board.games.first.game.entity.repo.MessageRepository;
 import board.games.first.game.entity.repo.SessionRepository;
+import board.games.first.game.entity.session.Session;
 import board.games.first.game.exception.ResourceNotFoundException;
 import board.games.first.game.mapper.CardActionMapper;
 import board.games.first.game.mapper.PlayerMapper;
