@@ -1,9 +1,10 @@
-import { defineStore } from 'pinia';
-import { $host } from '../http/index.js';
+import {defineStore} from 'pinia';
+import {$host} from '../http/index.js';
 
 export const useUserStore = defineStore('user', {
     state: () => ({
         token: '' || localStorage.getItem('token'),
+        user: {},
     }),
     actions: {
         async registration(payload) {
@@ -36,5 +37,9 @@ export const useUserStore = defineStore('user', {
             localStorage.clear();
         }
     },
-    getters: {},
+    getters: {
+        getUser: (state) => {
+            return state.user = JSON.parse(localStorage.getItem('user'));
+        }
+    },
 });

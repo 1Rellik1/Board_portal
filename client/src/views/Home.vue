@@ -144,6 +144,7 @@ export default {
     grid-gap: 45px;
     padding: 8px 64px;
     overflow-y: auto;
+    overflow-x: hidden;
     text-align: center;
   }
 }

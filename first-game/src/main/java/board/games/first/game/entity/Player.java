@@ -31,7 +31,7 @@ public class Player {
     @Enumerated(STRING)
     private PlayerRole role;
 
-    @Column(name = "colour", nullable = false)
+    @Column(name = "colour")
     @Enumerated(STRING)
     private PlayerColour colour;
 
