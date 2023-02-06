@@ -61,6 +61,8 @@ public class SessionWebSocketService {
         session.getPlayers().add(player);
         session.getMessages().add(message);
 
+        sessionRepository.save(session);
+
         return player;
     }
 

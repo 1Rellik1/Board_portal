@@ -36,10 +36,11 @@ public class SecurityConfig {
     public CorsFilter corsFilter() {
         var source = new UrlBasedCorsConfigurationSource();
         var config = new CorsConfiguration();
-        config.addAllowedOrigin("*");
+        config.addAllowedOrigin("http://localhost:3000");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         config.addExposedHeader("*");
+        config.setAllowCredentials(true);
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
@@ -63,7 +64,7 @@ public class SecurityConfig {
         http
                 // Swagger endpoints must be publicly accessible
                 .authorizeHttpRequests((requests) -> requests
-                        .antMatchers("/", "/assets/**").permitAll()
+                        .antMatchers("/", "/assets/**", "/gameplay/**").permitAll()
                         .anyRequest().authenticated()
                 )
 

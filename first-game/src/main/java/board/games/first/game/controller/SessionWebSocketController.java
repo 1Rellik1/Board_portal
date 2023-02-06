@@ -34,6 +34,7 @@ public class SessionWebSocketController {
 
     @MessageMapping(value = "/api/monopoly/sessions/add-player")
     public void addPlayer(PlayerInfoDTO dto) {
+        System.out.println("Отработало");
         Player player = sessionWebSocketService.addPlayerToSession(dto.getSessionId(), dto.getPlayerName());
         PlayerDTO playerDTO = PlayerMapper.entityToPLayerDTO(player);
         ResultMessageDTO resultMessage = new ResultMessageDTO(dto.getPlayerName(), NEW_PLAYER);
