@@ -24,6 +24,9 @@ public class CommonCard {
     @Enumerated(STRING)
     private CardType type;
 
+    @Column(name = "price")
+    private Long price;
+
 //    @Column(name = "position", nullable = false)
 //    private Integer position;
 

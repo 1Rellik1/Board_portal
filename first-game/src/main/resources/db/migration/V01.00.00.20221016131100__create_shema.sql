@@ -15,6 +15,7 @@ CREATE TABLE common_card
     id varchar (255),
     image text not null ,
     image_type varchar(50) not null ,
+    sale_price bigint,
     card_type varchar(255)NOT NULL,
     CONSTRAINT common_card_pkey PRIMARY KEY (id)
 );
