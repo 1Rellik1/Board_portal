@@ -24,8 +24,8 @@ public class CommonCard {
     @Enumerated(STRING)
     private CardType type;
 
-    @Column(name = "position", nullable = false)
-    private Integer position;
+//    @Column(name = "position", nullable = false)
+//    private Integer position;
 
     public String getId() {
         return id;

@@ -16,6 +16,9 @@ coverage
 *.local
 yarn.lock
 
+#env
+.env
+
 /cypress/videos/
 /cypress/screenshots/
 

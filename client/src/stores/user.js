@@ -10,7 +10,7 @@ export const useUserStore = defineStore('user', {
             await $host.post('/register', {
                 userName: payload.userName,
                 email: payload.email,
-                userPassword: payload.password,
+                password: payload.password,
             }, {}).then((response) => {
                 console.log(response.data);
             }).catch(e => {
@@ -21,11 +21,12 @@ export const useUserStore = defineStore('user', {
         async login(payload) {
             await $host.post('/login', {
                 userName: payload.userName,
-                userPassword: payload.password,
+                password: payload.password,
             }, {}).then((response) => {
                 console.log('Авторизавция прошла успешно');
                 console.log(response);
                 localStorage.setItem('token', response.headers.authorization);
+                localStorage.setItem('user', JSON.stringify(response.data));
             }).catch(e => {
                 console.log(e);
                 throw e;
