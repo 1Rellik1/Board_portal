@@ -63,7 +63,7 @@ public class SecurityConfig {
         http
                 // Swagger endpoints must be publicly accessible
                 .authorizeHttpRequests((requests) -> requests
-                        .antMatchers("/", "/assets/**").permitAll()
+                        .antMatchers("/", "/assets/**", "/api/getGamesInfo").permitAll()
                         .antMatchers("/api/uploadGameInfo","/api/updateGameInfo").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )

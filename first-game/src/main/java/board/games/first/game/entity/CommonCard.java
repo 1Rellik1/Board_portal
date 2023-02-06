@@ -50,4 +50,8 @@ public class CommonCard {
     public void setType(CardType type) {
         this.type = type;
     }
+
+    public String getImageType() { return imageType; }
+
+    public void setImageType(String imageType) { this.imageType = imageType; }
 }
