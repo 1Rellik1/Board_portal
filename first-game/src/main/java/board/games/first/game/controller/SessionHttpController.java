@@ -1,12 +1,14 @@
 package board.games.first.game.controller;
 
+import static board.games.first.game.params.ResultMessage.*;
+
 import board.games.first.game.dto.request.PlayerInfoDTO;
 import board.games.first.game.dto.response.PlayingFieldStateDTO;
 import board.games.first.game.dto.response.PlayingFieldStaticDTO;
+import board.games.first.game.dto.response.SessionDto;
 import board.games.first.game.dto.response.SuccessMessageDTO;
 import board.games.first.game.entity.CardState;
 import board.games.first.game.entity.CompanyCard;
-import board.games.first.game.entity.session.Session;
 import board.games.first.game.service.CardStateService;
 import board.games.first.game.service.CompanyCardService;
 import board.games.first.game.service.SessionCommonService;
@@ -16,17 +18,22 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static board.games.first.game.params.ResultMessage.*;
-
 @RestController
 @RequestMapping("/api")
 public class SessionHttpController {
+
     private final SessionHttpService sessionHttpService;
+
     private final SessionCommonService sessionCommonService;
+
     private final CompanyCardService companyCardService;
+
     private final CardStateService cardStateService;
 
-    public SessionHttpController(SessionHttpService sessionHttpService, SessionCommonService sessionCommonService, CompanyCardService companyCardService, CardStateService cardStateService) {
+    public SessionHttpController(SessionHttpService sessionHttpService,
+            SessionCommonService sessionCommonService,
+            CompanyCardService companyCardService,
+            CardStateService cardStateService) {
         this.sessionHttpService = sessionHttpService;
         this.sessionCommonService = sessionCommonService;
         this.companyCardService = companyCardService;
@@ -72,8 +79,15 @@ public class SessionHttpController {
     }
 
     @GetMapping(value = "/monopoly/sessions")
-    public ResponseEntity<List<Session>> getSessions() {
-        return ResponseEntity.ok().body(sessionHttpService.getSessions());
+    public ResponseEntity<List<SessionDto>> getSessions() {
+        return ResponseEntity.ok().body(sessionHttpService.getSessions().stream().map(session -> {
+            SessionDto sessionDto = new SessionDto();
+            List<String> playerNames = session.getPlayers().stream().map(player -> player.getName()).toList();
+            sessionDto.setId(session.getId());
+            sessionDto.setAmountOfPlayers(playerNames.size());
+            sessionDto.setPlayerNames(playerNames);
+            return sessionDto;
+        }).toList());
     }
 
 }
