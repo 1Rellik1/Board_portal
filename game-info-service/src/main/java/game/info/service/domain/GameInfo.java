@@ -1,5 +1,7 @@
 package game.info.service.domain;
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 import java.util.UUID;
 
@@ -21,6 +23,7 @@ public class GameInfo {
 
     @Lob
     @Column(name = "image",nullable = false)
+    @Type(type = "org.hibernate.type.TextType")
     private String image;
 
     public String getType() {
