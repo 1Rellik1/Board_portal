@@ -1,7 +1,7 @@
 package board.games.first.game.service;
 
 import board.games.first.game.entity.Message;
-import board.games.first.game.entity.Session;
+import board.games.first.game.entity.session.Session;
 import board.games.first.game.entity.repo.MessageRepository;
 import board.games.first.game.MessageCreator;
 import org.springframework.stereotype.Service;

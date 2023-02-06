@@ -73,8 +73,7 @@ public class SessionWebSocketController {
 
     @MessageMapping(value = "/api/monopoly/sessions/roll-dice")
     public void getNewPlayerPosition(PlayerMoveDTO dto) {
-        RollDiceResultDTO rollDiceResult = sessionWebSocketService.movePlayer(dto.getDiceResult(), dto.getSessionId(),
-                dto.getPlayerName());
+        RollDiceResultDTO rollDiceResult = sessionWebSocketService.rollDices(dto.getSessionId(), dto.getPlayerName());
         Long balance = rollDiceResult.getPlayerBalance().getBalance();
 
         if (balance != null) {
@@ -87,7 +86,7 @@ public class SessionWebSocketController {
 
         ResultMessageDTO resultMessage = new ResultMessageDTO(
                 dto.getPlayerName(),
-                MessageContentMapper.rollDiceToMessageContent(rollDiceResult.getDiceResult())
+                MessageContentMapper.rollDiceToMessageContent(rollDiceResult.getDigits())
         );
         MoveResultDTO result = RollDicesMapper.rollResultToMoveDTO(rollDiceResult);
 

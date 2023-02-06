@@ -1,16 +1,21 @@
 package board.games.first.game.entity;
 
-import javax.persistence.*;
+import static board.games.first.game.entity.CompanyCardToLevelFine.COMPANY_CARD_TO_LEVEL_FINE_TABLE_NAME;
+import static board.games.first.game.entity.CompanyCardToLevelFine.ColumnName.CC2LF_COMPANY_CARD_ID;
+import static board.games.first.game.entity.CompanyCardToLevelFine.ColumnName.CC2LF_LEVEL_FINE_ID;
+import static javax.persistence.FetchType.LAZY;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static javax.persistence.FetchType.LAZY;
+import javax.persistence.*;
 
 @Entity
 
 @Table(name = "company_card")
 public class CompanyCard {
+
     @Id
     private String id = UUID.randomUUID().toString();
 
@@ -33,7 +38,8 @@ public class CompanyCard {
     private Integer collectionNumber;
 
     @ManyToMany(fetch = LAZY)
-    @JoinColumn(name = "level_fines", nullable = false)
+    @JoinTable(name = COMPANY_CARD_TO_LEVEL_FINE_TABLE_NAME, joinColumns = @JoinColumn(name = CC2LF_COMPANY_CARD_ID),
+            inverseJoinColumns = @JoinColumn(name = CC2LF_LEVEL_FINE_ID))
     private List<LevelFine> fines = new ArrayList<>();
 
     @OneToOne(fetch = LAZY)

@@ -5,7 +5,7 @@ import board.games.first.game.dto.response.PlayingFieldStaticDTO;
 import board.games.first.game.entity.CardState;
 import board.games.first.game.entity.CommonCard;
 import board.games.first.game.entity.Player;
-import board.games.first.game.entity.Session;
+import board.games.first.game.entity.session.Session;
 import board.games.first.game.entity.repo.SessionRepository;
 import board.games.first.game.mapper.PlayingFieldMapper;
 import org.springframework.stereotype.Service;

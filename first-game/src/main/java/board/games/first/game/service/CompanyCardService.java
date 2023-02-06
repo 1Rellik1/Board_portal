@@ -3,7 +3,7 @@ package board.games.first.game.service;
 import board.games.first.game.dto.response.CardDetailDTO;
 import board.games.first.game.entity.CardState;
 import board.games.first.game.entity.CompanyCard;
-import board.games.first.game.entity.Session;
+import board.games.first.game.entity.session.Session;
 import board.games.first.game.entity.repo.CompanyCardRepository;
 import board.games.first.game.exception.ResourceNotFoundException;
 import board.games.first.game.mapper.CardStateMapper;
