@@ -23,6 +23,10 @@ public class SessionCommonService {
                 .orElseThrow(() -> new ResourceNotFoundException(SESSION_NOT_FOUND));
     }
 
+    public void saveSession(Session session){
+        sessionRepository.saveAndFlush(session);
+    }
+
     @Transactional(readOnly = true)
     public void checkSessionExists(String sessionId) {
         if (!sessionRepository.existsSessionById(sessionId)) {

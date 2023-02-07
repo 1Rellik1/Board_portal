@@ -80,7 +80,7 @@ CREATE TABLE player
     position integer NOT NULL,
     role varchar(255)  NOT NULL,
     status varchar(255)  NOT NULL,
-    name varchar(255),
+    name varchar(255) unique,
     session_id varchar(255),
     CONSTRAINT player_pkey PRIMARY KEY (id)
     );

@@ -9,7 +9,7 @@ public class ResultMessage {
     public static final String BUY_CARD = "приобретает себе новую компанию";
     public static final String PAY_FOR_CARD = "попадает на территорию другого игрока и платит за аренду";
     public static final String NEW_PLAYER = "присоединяется в игру";
-    public static final String DICE_ROLL_RESULT = "выбрасывает %d";
+    public static final String DICE_ROLL_RESULT = "выбрасывает %d и %d";
     public static final String GAME_WAS_STARTED = "Игра началась!";
     public static final String IMPROVE_CARD = "улучшает свою компанию";
     public static final String SELL_CARD = "продает свою компанию";

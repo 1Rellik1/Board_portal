@@ -77,6 +77,7 @@ public class SessionWebSocketService {
         Message message = MessageCreator.createStartGameMessage();
         messageRepository.save(message);
         session.getMessages().add(message);
+        sessionRepository.saveAndFlush(session);
     }
 
     @Transactional
@@ -160,7 +161,7 @@ public class SessionWebSocketService {
         int newPosition;
         if (potentialPos < FIELD_MIN_SIZE) {
             newPosition = FIELD_SIZE + potentialPos;
-        } else if (potentialPos > FIELD_SIZE) {
+        } else if (potentialPos >= FIELD_SIZE) {
             newPosition = potentialPos - FIELD_SIZE;
         } else {
             newPosition = potentialPos;
@@ -187,7 +188,7 @@ public class SessionWebSocketService {
             messageRepository.save(updMessage);
             session.getMessages().add(updMessage);
         }
-
+        sessionRepository.saveAndFlush(session);
         return RollDicesMapper.rollResultTODTO(digits, playerName, newPosition, balance);
 
     }

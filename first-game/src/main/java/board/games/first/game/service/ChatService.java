@@ -23,5 +23,6 @@ public class ChatService {
         Message newMessage = MessageCreator.createSentMessage(message, sender);
         messageRepository.save(newMessage);
         session.getMessages().add(newMessage);
+        sessionCommonService.saveSession(session);
     }
 }

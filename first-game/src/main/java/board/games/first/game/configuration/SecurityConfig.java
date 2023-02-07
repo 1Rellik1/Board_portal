@@ -37,6 +37,7 @@ public class SecurityConfig {
         var source = new UrlBasedCorsConfigurationSource();
         var config = new CorsConfiguration();
         config.addAllowedOrigin("http://localhost:3000");
+        config.addAllowedOrigin("http://127.0.0.1:3000/");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         config.addExposedHeader("*");

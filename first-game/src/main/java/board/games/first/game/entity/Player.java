@@ -1,27 +1,29 @@
 package board.games.first.game.entity;
 
+import static board.games.first.game.params.InitialGameValue.INITIAL_BALANCE;
+import static board.games.first.game.params.InitialGameValue.INITIAL_PLAYER_STATUS;
+import static javax.persistence.EnumType.STRING;
+
 import board.games.first.game.enums.PlayerColour;
 import board.games.first.game.enums.PlayerRole;
 import board.games.first.game.enums.PlayerStatus;
 
-import javax.persistence.*;
-
 import java.util.UUID;
 
-import static board.games.first.game.params.InitialGameValue.INITIAL_BALANCE;
-import static board.games.first.game.params.InitialGameValue.INITIAL_PLAYER_STATUS;
-import static javax.persistence.EnumType.STRING;
+import javax.persistence.*;
 
 @Entity
 
 @Table(name = "player")
 public class Player {
+
     @Id
     private String id = UUID.randomUUID().toString();
 
     @Column(name = "session_id")
     private String sessionId;
-    @Column(name = "name", nullable = false)
+
+    @Column(name = "name", nullable = false,unique = true)
     private String name;
 
     @Column(name = "position", nullable = false)
