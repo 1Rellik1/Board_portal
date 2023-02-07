@@ -141,7 +141,8 @@ public class SessionWebSocketController {
                         creator.getPlayerName(),
                         receiver.getPlayerName(),
                         receiver.getMoney(),
-                        creator.getCards()
+                        creator.getCards(),
+                        creator.getMoney()
                 );
         CardStatePlayerBalanceDTO receiverDTO = sessionWebSocketService
                 .acceptOffer(
@@ -149,7 +150,8 @@ public class SessionWebSocketController {
                         receiver.getPlayerName(),
                         creator.getPlayerName(),
                         creator.getMoney(),
-                        receiver.getCards()
+                        receiver.getCards(),
+                        receiver.getMoney()
                 );
         chatService.addCommonMessageToChatHistory(sessionId, receiver.getPlayerName(), ACCEPT_OFFER);
         Map<String, CardStateDTO> cardStates = Stream.of(creatorDTO.getCardState(), receiverDTO.getCardState())

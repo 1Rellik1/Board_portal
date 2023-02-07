@@ -1,16 +1,27 @@
 package board.games.first.game.service;
 
+import static board.games.first.game.enums.MoveStatus.MIDDLE;
+import static board.games.first.game.enums.MoveStatus.START;
+import static board.games.first.game.enums.PlayerRole.USER;
+import static board.games.first.game.enums.PlayerStatus.LOST;
+import static board.games.first.game.enums.PlayerStatus.PLAYING;
+import static board.games.first.game.enums.SessionState.IN_PROGRESS;
+import static board.games.first.game.params.EventParam.START_BONUS;
+import static board.games.first.game.params.InitialGameValue.*;
+import static board.games.first.game.params.PlayingFieldParam.*;
+import static board.games.first.game.params.ResultMessage.SURRENDER;
+
+import board.games.first.game.MessageCreator;
 import board.games.first.game.dto.response.CardStatePlayerBalanceDTO;
 import board.games.first.game.dto.response.RollDiceResultDTO;
 import board.games.first.game.dto.response.SurrenderPlayerDTO;
 import board.games.first.game.entity.CardState;
 import board.games.first.game.entity.Message;
 import board.games.first.game.entity.Player;
-import board.games.first.game.entity.session.Session;
 import board.games.first.game.entity.repo.MessageRepository;
 import board.games.first.game.entity.repo.SessionRepository;
+import board.games.first.game.entity.session.Session;
 import board.games.first.game.enums.MoveStatus;
-import board.games.first.game.MessageCreator;
 import board.games.first.game.mapper.PlayerMapper;
 import board.games.first.game.mapper.RollDicesMapper;
 import org.springframework.stereotype.Service;
@@ -19,29 +30,27 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static board.games.first.game.params.EventParam.START_BONUS;
-import static board.games.first.game.params.InitialGameValue.*;
-import static board.games.first.game.params.PlayingFieldParam.*;
-import static board.games.first.game.params.ResultMessage.SURRENDER;
-import static board.games.first.game.enums.MoveStatus.MIDDLE;
-import static board.games.first.game.enums.MoveStatus.START;
-import static board.games.first.game.enums.PlayerRole.USER;
-import static board.games.first.game.enums.PlayerStatus.LOST;
-import static board.games.first.game.enums.PlayerStatus.PLAYING;
-import static board.games.first.game.enums.SessionState.IN_PROGRESS;
-
 @Service
 public class SessionWebSocketService {
+
     private final MessageRepository messageRepository;
+
     private final SessionRepository sessionRepository;
+
     private final ChatService chatService;
+
     private final SessionCommonService sessionCommonService;
+
     private final PlayerService playerService;
+
     private final CardStateService cardStateService;
 
-    public SessionWebSocketService(MessageRepository messageDAO, SessionRepository sessionDAO,
-                                   ChatService chatService, SessionCommonService sessionCommonService,
-                                   PlayerService playerService, CardStateService cardStateService) {
+    public SessionWebSocketService(MessageRepository messageDAO,
+            SessionRepository sessionDAO,
+            ChatService chatService,
+            SessionCommonService sessionCommonService,
+            PlayerService playerService,
+            CardStateService cardStateService) {
         this.messageRepository = messageDAO;
         this.sessionRepository = sessionDAO;
         this.chatService = chatService;
@@ -66,7 +75,6 @@ public class SessionWebSocketService {
         return player;
     }
 
-
     @Transactional
     public void startGame(String sessionId, String nextPlayer) {
         Session session = sessionCommonService.getSession(sessionId);
@@ -82,8 +90,11 @@ public class SessionWebSocketService {
 
     @Transactional
     public String getNextPlayer(String sessionId, String previousPLayer) {
-        List<Player> players = sessionCommonService.getSession(sessionId).getPlayers().stream()
-                .sorted(Comparator.comparing(Player::getId)).toList();
+        List<Player> players = sessionCommonService.getSession(sessionId)
+                .getPlayers()
+                .stream()
+                .sorted(Comparator.comparing(Player::getId))
+                .toList();
         int count = players.size();
 
         ArrayDeque<Player> deque = new ArrayDeque<>();
@@ -134,7 +145,7 @@ public class SessionWebSocketService {
         chatService.addCommonMessageToChatHistory(sessionId, playerName, SURRENDER);
 
         Session session = sessionCommonService.getSession(sessionId);
-        List<CardState> cardStates =session.getCardStates()
+        List<CardState> cardStates = session.getCardStates()
                 .stream()
                 .filter(cs -> Objects.equals(cs.getOwnerName(), playerName))
                 .collect(Collectors.toList());
@@ -152,8 +163,8 @@ public class SessionWebSocketService {
     public RollDiceResultDTO rollDices(String sessionId, String playerName) {
         Player player = playerService.getPlayer(sessionId, playerName);
 
-        int firstRoll =new Random().nextInt(MAX_BORDER + 1 - MIN_BORDER) + MIN_BORDER;
-        int secondRoll =new Random().nextInt(MAX_BORDER + 1 - MIN_BORDER) + MIN_BORDER;
+        int firstRoll = new Random().nextInt(MAX_BORDER + 1 - MIN_BORDER) + MIN_BORDER;
+        int secondRoll = new Random().nextInt(MAX_BORDER + 1 - MIN_BORDER) + MIN_BORDER;
         List<Integer> digits = List.of(firstRoll, secondRoll);
 
         int position = player.getPosition();
@@ -194,9 +205,14 @@ public class SessionWebSocketService {
     }
 
     @Transactional
-    public CardStatePlayerBalanceDTO acceptOffer(String sessionId, String playerName, String ownerName, Long money, List<String> cardIds) {
+    public CardStatePlayerBalanceDTO acceptOffer(String sessionId,
+            String playerName,
+            String ownerName,
+            Long money,
+            List<String> cardIds,
+            Long moneToMinus) {
         Player player = playerService.getPlayer(sessionId, playerName);
-        Long newBalance = player.getBalance() + money;
+        Long newBalance = player.getBalance() + money-moneToMinus;
         playerService.updatePlayerBalance(newBalance, sessionId, playerName);
 
         List<CardState> cardStates = cardStateService.findByCardIds(cardIds);

@@ -9,17 +9,6 @@ ALTER TABLE session_to_message
 ALTER TABLE session_to_message
     ADD CONSTRAINT session_to_message_message_fk FOREIGN KEY (message_id) REFERENCES message (id);
 
-CREATE TABLE company_card_to_level_fine
-(
-    company_card_id character varying(255) NOT NULL,
-    level_fine_id   character varying(255) NOT NULL
-);
-
-ALTER TABLE company_card_to_level_fine
-    ADD CONSTRAINT company_card_to_level_fine_company_card_fk FOREIGN KEY (company_card_id) REFERENCES company_card (id);
-ALTER TABLE company_card_to_level_fine
-    ADD CONSTRAINT company_card_to_level_fine_level_fine_fk FOREIGN KEY (level_fine_id) REFERENCES level_fine (id);
-
 CREATE TABLE session_to_card_state
 (
     session_id    character varying(255) NOT NULL,

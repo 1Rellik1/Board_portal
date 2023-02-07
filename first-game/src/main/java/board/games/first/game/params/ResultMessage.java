@@ -22,7 +22,7 @@ public class ResultMessage {
     public static final String TAX_INCOME_RESULT = "платит подоходный налог в размере %dK";
     public static final String TAX_LUXURY_RESULT = "платит налог на роскошь в размере %dK";
     public static final String START_BONUS_RESULT = "попадает на поле Старт и получает %dK";
-    public static final String TELEPORT_RESULT = "попадает на телепорт и перемещается в тюрьму";
+    public static final String TELEPORT_RESULT = "попадает на телепорт и перемещается в тюрьму на экскурсию";
     public static final String SURRENDER = "не хочет продолжать игру и сдаётся";
     public static final String OFFER_SEND = "предлагает игроку %s подписать договор";
     public static final String REJECT_OFFER = "отклоняет предложение";

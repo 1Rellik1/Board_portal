@@ -1,9 +1,18 @@
 package board.games.first.game.service;
 
+import static board.games.first.game.enums.MoveStatus.END;
+import static board.games.first.game.enums.MoveStatus.START;
+import static board.games.first.game.params.ErrorMessage.CARD_NOT_FOUND;
+import static board.games.first.game.params.InitialGameValue.INITIAL_CARD_FINE;
+import static board.games.first.game.params.InitialGameValue.INITIAL_CARD_OWNER_NAME;
+
 import board.games.first.game.MessageCreator;
 import board.games.first.game.dto.response.CardStatePlayerBalanceDTO;
 import board.games.first.game.dto.response.PayForCardDTO;
-import board.games.first.game.entity.*;
+import board.games.first.game.entity.CardState;
+import board.games.first.game.entity.CompanyCard;
+import board.games.first.game.entity.Message;
+import board.games.first.game.entity.Player;
 import board.games.first.game.entity.repo.CardStateRepository;
 import board.games.first.game.entity.repo.MessageRepository;
 import board.games.first.game.entity.repo.SessionRepository;
@@ -17,21 +26,24 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Objects;
 
-import static board.games.first.game.params.ErrorMessage.CARD_NOT_FOUND;
-import static board.games.first.game.params.InitialGameValue.INITIAL_CARD_FINE;
-import static board.games.first.game.params.InitialGameValue.INITIAL_CARD_OWNER_NAME;
-import static board.games.first.game.enums.MoveStatus.END;
-import static board.games.first.game.enums.MoveStatus.START;
-
 @Service
 public class CardActionService {
+
     private final SessionRepository sessionRepository;
+
     private final MessageRepository messageRepository;
+
     private final CardStateRepository cardStateRepository;
+
     private final SessionCommonService sessionCommonService;
+
     private final PlayerService playerService;
 
-    public CardActionService(SessionRepository sessionRepository, MessageRepository messageRepository, CardStateRepository cardStateRepository, SessionCommonService sessionCommonService, PlayerService playerService) {
+    public CardActionService(SessionRepository sessionRepository,
+            MessageRepository messageRepository,
+            CardStateRepository cardStateRepository,
+            SessionCommonService sessionCommonService,
+            PlayerService playerService) {
         this.sessionRepository = sessionRepository;
         this.messageRepository = messageRepository;
         this.cardStateRepository = cardStateRepository;
@@ -47,8 +59,8 @@ public class CardActionService {
         Message message = MessageCreator.createBuyCardMessage(playerName);
         messageRepository.save(message);
         session.getMessages().add(message);
-
-        CardState cardState = findCardStateByCardId( session.getCardStates(),cardId);
+        sessionRepository.saveAndFlush(session);
+        CardState cardState = findCardStateByCardId(session.getCardStates(), cardId);
         CompanyCard card = cardState.getCard();
         Player player = playerService.getPlayer(sessionId, playerName);
 
@@ -69,8 +81,8 @@ public class CardActionService {
         Message message = MessageCreator.createImproveCardMessage(playerName);
         messageRepository.save(message);
         session.getMessages().add(message);
-
-        CardState cardState = findCardStateByCardId( session.getCardStates(),cardId);
+        sessionRepository.saveAndFlush(session);
+        CardState cardState = findCardStateByCardId(session.getCardStates(), cardId);
         CompanyCard card = cardState.getCard();
         Player player = playerService.getPlayer(sessionId, playerName);
 
@@ -90,7 +102,7 @@ public class CardActionService {
         Session session = sessionCommonService.getSession(sessionId);
         Message message = null;
 
-        CardState cardState = findCardStateByCardId( session.getCardStates(),cardId);
+        CardState cardState = findCardStateByCardId(session.getCardStates(), cardId);
         CompanyCard card = cardState.getCard();
         Player player = playerService.getPlayer(sessionId, playerName);
 
@@ -112,7 +124,7 @@ public class CardActionService {
 
         messageRepository.save(message);
         session.getMessages().add(message);
-
+        sessionRepository.saveAndFlush(session);
         cardStateRepository.saveAndFlush(cardState);
         playerService.updatePlayerBalance(newBalance, sessionId, playerName);
 
@@ -127,8 +139,8 @@ public class CardActionService {
         Message newMessage = MessageCreator.createPayForCardMessage(buyerName);
         messageRepository.save(newMessage);
         session.getMessages().add(newMessage);
-
-        CardState cardState = findCardStateByCardId( session.getCardStates(),cardId);
+        sessionRepository.saveAndFlush(session);
+        CardState cardState = findCardStateByCardId(session.getCardStates(), cardId);
         String ownerName = cardState.getOwnerName();
         Long fine = cardState.getCurrentFine();
 
@@ -144,8 +156,7 @@ public class CardActionService {
     }
 
     private CardState findCardStateByCardId(List<CardState> cardStates, String cardId) {
-        return cardStates
-                .stream()
+        return cardStates.stream()
                 .filter(cs -> Objects.equals(cs.getCard().getId(), cardId))
                 .findAny()
                 .orElseThrow(() -> new ResourceNotFoundException(CARD_NOT_FOUND));
