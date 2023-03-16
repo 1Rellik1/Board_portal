@@ -36,6 +36,14 @@ const router = createRouter({
                         title: 'Поддержка',
                     },
                 },
+                {
+                    path: '/help2',
+                    name: 'help2',
+                    component: () => import('../views/Pages/Help/Help2.vue'),
+                    meta: {
+                        title: 'Поддержка2',
+                    },
+                },
             ]
         },
     ],

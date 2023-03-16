@@ -20,6 +20,9 @@
           <router-link to="/help" :active-class="$style.activeLink">
             Поддержка
           </router-link>
+          <router-link to="/help2" :active-class="$style.activeLink">
+            Поддержка2
+          </router-link>
         </nav>
       </div>
 
