@@ -15,6 +15,10 @@ const $hostGames = axios.create({
 const $authHostMonopoly = axios.create({
     baseURL: import.meta.env.VITE_MONOPOLY_API
 });
+const $authHostBunker = axios.create({
+    baseURL: import.meta.env.VITE_BUNKER_API
+});
+
 
 const authInterceptor = config => {
     config.headers.authorization = `Bearer ${localStorage.getItem('token')}`;
@@ -23,10 +27,12 @@ const authInterceptor = config => {
 
 $authHost.interceptors.request.use(authInterceptor);
 $authHostMonopoly.interceptors.request.use(authInterceptor);
+$authHostBunker.interceptors.request.use(authInterceptor);
 
 export {
     $host,
     $hostGames,
     $authHost,
     $authHostMonopoly,
+    $authHostBunker,
 };

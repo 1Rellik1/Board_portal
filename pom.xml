@@ -17,5 +17,6 @@
         <module>first-game</module>
         <module>user-info-service</module>
         <module>game-info-service</module>
+        <module>bunker-game</module>
     </modules>
 </project>
