@@ -64,5 +64,4 @@ public class UserService {
         userRepository.saveAndFlush(user);
         return true;
     }
-
 }

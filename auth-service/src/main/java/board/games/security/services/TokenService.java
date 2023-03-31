@@ -1,5 +1,7 @@
 package board.games.security.services;
 
+import static java.util.stream.Collectors.joining;
+
 import board.games.security.entities.User;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -20,13 +22,12 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
-import static java.util.stream.Collectors.joining;
-
 /**
  * Сервис работы с токенами
  */
 @Service
 public class TokenService {
+
     /**
      * Хэдер хронящий токен.
      */
@@ -50,9 +51,12 @@ public class TokenService {
     /**
      * Конструктор
      *
-     * @param authenticationManager Менеджер авторизации
-     * @param jwtEncoder            Кодировщик токена
-     * @param jwtDecoder            Декодировщик токена
+     * @param authenticationManager
+     *            Менеджер авторизации
+     * @param jwtEncoder
+     *            Кодировщик токена
+     * @param jwtDecoder
+     *            Декодировщик токена
      */
     public TokenService(AuthenticationManager authenticationManager, JwtEncoder jwtEncoder, JwtDecoder jwtDecoder) {
         this.authenticationManager = authenticationManager;
@@ -63,14 +67,13 @@ public class TokenService {
     public ResponseEntity<User> createToken(User request) {
         try {
             Authentication authentication;
+            // Аутентификация пользователя
             if (request.getUsername() != null) {
-                authentication =
-                        authenticationManager.authenticate(
-                                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+                authentication = authenticationManager.authenticate(
+                        new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
             } else {
-                authentication =
-                        authenticationManager.authenticate(
-                                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+                authentication = authenticationManager.authenticate(
+                        new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
             }
 
             var user = (User) authentication.getPrincipal();
@@ -78,31 +81,28 @@ public class TokenService {
             var now = Instant.now();
             var expiry = 36000L;
             var scope =
-                    authentication.getAuthorities().stream()
-                            .map(GrantedAuthority::getAuthority)
-                            .collect(joining(" "));
+                    authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(joining(" "));
 
-            var claims =
-                    JwtClaimsSet.builder()
-                            .expiresAt(now.plusSeconds(expiry))
-                            .subject(String.format("%s,%s", user.getId(), user.getUsername()))
-                            .claim("roles", scope)
-                            .build();
-
+            // Добавления параметров токена:Время действия, данные пользователя, роль пользователя
+            var claims = JwtClaimsSet.builder()
+                    .expiresAt(now.plusSeconds(expiry))
+                    .subject(String.format("%s,%s", user.getId(), user.getUsername()))
+                    .claim("roles", scope)
+                    .build();
+            // Шифрование токена
             var token = this.jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
-
-            return ResponseEntity.ok()
-                    .header(HttpHeaders.AUTHORIZATION, token)
-                    .body(user);
+            // Формирование ответа
+            return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, token).body(user);
         } catch (BadCredentialsException ex) {
+            //Обработка ошибки данных пользователя
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
 
     public ResponseEntity<Long> isTokenExpired() {
 
-        var token = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
-                .getRequest().getHeader(AUTHORIZATION_HEADER);
+        var token = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest()
+                .getHeader(AUTHORIZATION_HEADER);
         token = token.substring(7, token.length());
         var decodedToken = jwtDecoder.decode(token);
         var now = Instant.now();
