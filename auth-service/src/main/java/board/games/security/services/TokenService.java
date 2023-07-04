@@ -73,7 +73,7 @@ public class TokenService {
                         new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
             } else {
                 authentication = authenticationManager.authenticate(
-                        new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+                        new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
             }
 
             var user = (User) authentication.getPrincipal();
@@ -94,7 +94,7 @@ public class TokenService {
             // Формирование ответа
             return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, token).body(user);
         } catch (BadCredentialsException ex) {
-            //Обработка ошибки данных пользователя
+            // Обработка ошибки данных пользователя
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
@@ -103,7 +103,7 @@ public class TokenService {
 
         var token = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest()
                 .getHeader(AUTHORIZATION_HEADER);
-        token = token.substring(7, token.length());
+        token = token.substring(7);
         var decodedToken = jwtDecoder.decode(token);
         var now = Instant.now();
         var expiresAt = decodedToken.getExpiresAt();

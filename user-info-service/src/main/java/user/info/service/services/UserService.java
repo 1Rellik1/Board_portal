@@ -1,6 +1,7 @@
 package user.info.service.services;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import user.info.service.entities.User;
 import user.info.service.entities.repo.UserRepository;
 
@@ -22,19 +23,21 @@ public class UserService {
      * <p>
      * Кодировщик пароля
      *
-     * @param userRepository Репозиторий пользователей
+     * @param userRepository
+     *            Репозиторий пользователей
      */
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-
     /**
      * Добавление нового пользователя
      *
-     * @param user Данные пользователя
+     * @param user
+     *            Данные пользователя
      * @return результат добавления
      */
+    @Transactional
     public boolean addNewUser(User user) {
         userRepository.saveAndFlush(user);
         return true;
@@ -43,9 +46,11 @@ public class UserService {
     /**
      * Обновление данных пользователя
      *
-     * @param user Данные пользователя
+     * @param user
+     *            Данные пользователя
      * @return результат обновления
      */
+    @Transactional
     public boolean updateUserUser(User user) {
         Optional<User> optionalUserFromDB = userRepository.getUserById(user.getId());
         if (optionalUserFromDB.isEmpty()) {

@@ -9,6 +9,7 @@ import user.info.service.services.UserService;
 @RestController
 @RequestMapping(value = "/api")
 public class UserController {
+
     /**
      * Сервис работы с пользователями.
      */
@@ -17,14 +18,16 @@ public class UserController {
     /**
      * Конструктор
      *
-     * @param userService Сервис работы с пользователями
+     * @param userService
+     *            Сервис работы с пользователями
      */
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
     /**
-     * @param request Данные пользователя
+     * @param request
+     *            Данные пользователя
      * @return Результат регистрации, в случае ошибки 409
      */
     @PostMapping("/register")
@@ -36,7 +39,8 @@ public class UserController {
     }
 
     /**
-     * @param request Данные пользователя
+     * @param request
+     *            Данные пользователя
      * @return Результат обновления данных пользователя, в случае ошибки 409
      */
     @PatchMapping("/updateUser")
