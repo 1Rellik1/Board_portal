@@ -91,5 +91,3 @@ CREATE TABLE session
     state          varchar(255) NOT NULL,
     CONSTRAINT session_pkey PRIMARY KEY (id)
 );
-
-Select * from game_info where string_to_array(game_info.style,',') && gameStyle and game_info.max_number_of_players >= maxNumberOfPlayers and string_to_array(game_info.game_type,',')  && gameType;
